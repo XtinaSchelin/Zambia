@@ -37,7 +37,7 @@ function validate_email($email) {
 // form when first entering page.
 function set_email_defaults() {
     $email['sendto'] = 1; // default to all participants
-    $email['sendfrom'] = 1; // default to Arisia Programming
+    $email['sendfrom'] = 1; // default to Programming email
     $email['sendcc'] = 1; // default to None
     $email['subject'] = "";
     $email['body'] = "";

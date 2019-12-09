@@ -114,8 +114,13 @@ function populateCustomTextArray() {
 
 // Function prepare_db_and_more()
 // Opens database channel
-if (!include ('../db_name.php'))
-	include ('./db_name.php'); // scripts which rely on this file (db_functions.php) may run from a different directory
+// scripts which rely on this file (db_functions.php) may run from a different directory
+if (file_exists("../db_name.php"))
+{
+    include('../db_name.php');
+} else {
+    include("./db_name.php");
+}
 function prepare_db_and_more() {
     global $con_start_php_timestamp, $linki;
     $linki = mysqli_connect(DBHOSTNAME, DBUSERID, DBPASSWORD, DBDB);

@@ -8,6 +8,7 @@ define("DBUSERID", "zambiademo");
 define("DBPASSWORD", "4fandom");
 define("DBDB", "zambiademo");
 define("CON_NAME", "Zambia Demo");
+define("CON_NUM", "12");
 define("BRAINSTORM_EMAIL", "brain@somewhere.net");
 define("PROGRAM_EMAIL", "program@somewhere.net");
 define("CON_NUM_DAYS", 5); // code works for 1 - 8
@@ -40,5 +41,6 @@ define("SECOND_TITLE_CAPTION", "Titre en fran&ccedil;ais");
 define("SECOND_DESCRIPTION_CAPTION", "Description en fran&ccedil;ais");
 define("SECOND_BIOGRAPHY_CAPTION", "Biographie en fran&ccedil;ais");
 define("SHOW_BRAINSTORM_LOGIN_HINT", FALSE);
+define("LOGO_FILENAME", "Z_illuminated.jpg"); // assumes the file is in the images directory
 define("REG_URL", "https://reg.arisia.org"); // URL for logging into user self service portion of registration system -- appears on My Profile page
 ?>

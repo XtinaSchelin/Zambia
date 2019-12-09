@@ -42,7 +42,7 @@ everything will make it.   We do try to save good ideas for future conventions.
       echo "</ul>\n";
       } // end of if brainstorming permitted
    else { // Brainstorming not permitted ?>
-<P> We are not accepting suggestions at this time for <?php echo CON_NAME;?>.
+<P> We are not accepting suggestions at this time for <?php echo CON_NAME + " " + CON_NUM;?>.
 <P> You may still use the "Search Sessions" tab to view the sessions which have been selected and to read their precis.  Note,
  many of these sessions will still not be scheduled if there is too little participant interest or if a suitable location and time
  slot is not available. </P> 

@@ -7,7 +7,7 @@ function render_session_interests($session_interest_count,$message,$message_erro
         echo "<div class=\"alert alert-block\" style=\"margin:15px 0;\">\n";
         echo "    <h4>Warning!</h4>\n";
         echo "    <span>\n";
-        echo "        You have not indicated in your profile that you will be attending " . CON_NAME . ".\n";
+        echo "        You have not indicated in your profile that you will be attending " . CON_NAME . " " . CON_NUM . ".\n";
         echo "        You will not be able to save your panel choices until you so do.\n";
         echo "    </span>\n";
         echo "</div>\n";

@@ -58,6 +58,6 @@ workflow for this year if you want to see it happen this year.
 
 <p>
 Number of con days: <?php echo CON_NUM_DAYS; ?><br />
-Con name: <?php echo CON_NAME; ?><br />
+Con name: <?php echo CON_NAME + " " + CON_NUM; ?><br />
 
 <?php staff_footer(); ?>

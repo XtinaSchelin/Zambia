@@ -57,7 +57,7 @@ participant_header($title);
 
     <!-- SCHEDULE availability times -->
     <h4 class="alert-info center">Times I Am Available</H4>
-    <p> For each day you will be attending <?php echo CON_NAME; ?>, please
+    <p> For each day you will be attending <?php echo CON_NAME + " " + CON_NUM; ?>, please
         indicate the times when you will be available as a program panelist.
         Entering a single time for the whole con is fine. Splitting a day into
         multiple time slots also is fine. Change all items in a row to blank to delete the row. 

@@ -14,10 +14,10 @@ if ($message != "") {
 }
 $chint = ($participant_array["interested"] == 0);
 if (may_I('postcon')) { ?>
-    <p>Thank you for your participation in <?php echo CON_NAME; ?>. With your help it was a great con. We look forward
+    <p>Thank you for your participation in <?php echo CON_NAME + " " + CON_NUM; ?>. With your help it was a great con. We look forward
         to your participation again next year.</p>
     <p>We will post instructions for participating in brainstorming for next year soon.</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--<?php echo CON_NAME; ?> Program and Events Committees</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--<?php echo CON_NAME + " " + CON_NUM; ?> Program and Events Committees</p>
     <?php
     participant_footer();
     exit();
@@ -28,8 +28,8 @@ if (may_I('postcon')) { ?>
 	<div class="span12">
 		<h3>Please check back often as more options will become available as we get closer to the convention.</h3>
 		<p>Dear <?php echo $participant_array["firstname"]; echo " "; echo $participant_array["lastname"]; ?>,</p>
-		<p>Welcome to the <?php echo CON_NAME; ?> Programming website.</p>
-		<h4>First, please take a moment to indicate your ability and interest in participating in <?php echo CON_NAME; ?> programming. You will only be scheduled if you say YES.</h4>
+		<p>Welcome to the <?php echo CON_NAME + " " + CON_NUM; ?> Programming website.</p>
+		<h4>First, please take a moment to indicate your ability and interest in participating in <?php echo CON_NAME + " " + CON_NUM; ?> programming. You will only be scheduled if you say YES.</h4>
 		<form class="form-horizontal" name="pwform" method=POST action="SubmitWelcome.php">
 			<fieldset>
                 <div id="update_section" class="control-group">
@@ -70,10 +70,10 @@ if (may_I('postcon')) { ?>
 		<p> Use the "Profile" menu to:</p>
 			<ul>
 				<li> Check your contact information. </li>
-				<li> Indicate whether you will be participating in <?php echo CON_NAME; ?>.</li>
+				<li> Indicate whether you will be participating in <?php echo CON_NAME + " " + CON_NUM; ?>.</li>
 				<li> Opt out of sharing your email address with other program participants.</li>
 				<li> Edit your name as you want to appear in our publications.</li>
-				<li> Enter a short bio for <?php echo CON_NAME; ?> publications.</li>
+				<li> Enter a short bio for <?php echo CON_NAME + " " + CON_NUM; ?> publications.</li>
 			</ul>
 		<?php if (may_I('my_panel_interests')) { ?>
 			<p> Use the "Session Interests" menu to:</p>
@@ -113,7 +113,7 @@ if (may_I('postcon')) { ?>
         <?php if (may_I('search_panels')) { ?>
           <p> Use the "Search Sessions" menu to:</p>
             <ul>
-              <li> See suggested topics for <?php echo CON_NAME; ?> programming. </li>
+              <li> See suggested topics for <?php echo CON_NAME + " " + CON_NUM; ?> programming. </li>
               <li> Indicate sessions you would like to participate on. </li>
             </ul>
         <?php } else { ?>
@@ -132,7 +132,7 @@ if (may_I('postcon')) { ?>
         
         </ol>
         
-        <p>Thank you for your time, and we look forward to seeing you at <?php echo CON_NAME; ?>.</p> 
+        <p>Thank you for your time, and we look forward to seeing you at <?php echo CON_NAME + " " + CON_NUM; ?>!</p> 
         <p>- <a href="mailto: <?php echo PROGRAM_EMAIL; ?>"><?php echo PROGRAM_EMAIL; ?> </a> </p>
         </div>
       </div>

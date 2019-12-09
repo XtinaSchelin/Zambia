@@ -31,7 +31,7 @@ EOD;
             <div class="alert alert-block">
                 <h4>Warning!</h4>
                 <span>
-                    You have not indicated in your profile that you will be attending <?php echo CON_NAME; ?>.
+                    You have not indicated in your profile that you will be attending <?php echo CON_NAME . " " . CON_NUM; ?>.
                     You will not be able to save your panel choices until you so do.
                 </span>
             </div>

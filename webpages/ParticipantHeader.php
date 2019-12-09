@@ -37,7 +37,7 @@ load_internal_javascript($title);
         <header class="row-fluid participant" id="top">
             <div id="regHeader" class="span12">
                 <div class="span9">
-                    <img src="images/Z_illuminated.jpg" alt="Illuminated Z" class="zambiaImage pull-left" />
+                    <img src="images/<?php echo LOGO_FILENAME; ?>" alt="Logo for <?php echo CON_NAME; ?>" class="zambiaImage pull-left" />
                     <h1 class="pull-left wide-medium-only">Zambia: <span class="wide-only">The <?php echo CON_NAME; ?> Scheduling Tool</span></h1>
                 </div>
   <?php if (isset($_SESSION['badgeid'])) { ?>

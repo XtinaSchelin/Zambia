@@ -55,7 +55,7 @@
 		  <div id="regHeader" class="span12">
   			<div class="span9">
   				<h1 class="pageHeader pull-left">
-  					<img id="zambiaLogo" src="images/Z_illuminated.jpg" alt="Illuminated Z" class="zambiaLogo zambiaImage wide-only" />
+  					<img id="zambiaLogo" src="images/<?php echo LOGO_FILENAME; ?>" alt="Logo for <?php echo CON_NAME; ?>" class="zambiaLogo zambiaImage wide-only" />
   					<div class="pageHeaderText span9"> Zambia<span class="wide-medium-only">: The <?php echo CON_NAME; ?> Scheduling Tool</span></div>
   				</h1>
   			</div>

@@ -1,12 +1,13 @@
 <?php
 // Copyright (c) 2005-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function RenderSessionCountReport($result) {
+function RenderSessionCountReport($result)
+{
     global $title;
     $title = "Session Count Report";
     require_once('StaffCommonCode.php');
     staff_header($title);
-    ?>
-<p> Sessions are sorted by the session status. </p><br>
+?>
+    <p> Sessions are sorted by the session status. </p><br>
 
     <table class="table table-condensed table-hover">
         <tr>
@@ -24,5 +25,5 @@ function RenderSessionCountReport($result) {
         }
         ?>
     </table>
-    <?php staff_footer();
+<?php staff_footer();
 } ?>

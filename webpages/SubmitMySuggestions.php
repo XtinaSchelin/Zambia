@@ -26,13 +26,14 @@ $otherideasE = mysqli_real_escape_string($otherideas, $linki);
 $suggestedguestsE = mysqli_real_escape_string($suggestedguests, $linki);
 $query = <<<EOD
 INSERT INTO ParticipantSuggestions (badgeid, paneltopics, otherideas, suggestedguests)
-    VALUES ("$badgeid", "$paneltopicsE", "$otherideasE", "$suggestedguestsE") 
-    ON DUPLICATE KEY UPDATE 
-        badgeid = VALUES(badgeid), paneltopics=VALUES(paneltopics),
-        otherideas = VALUES(otherideas), suggestedguests=VALUES(suggestedguests);
+VALUES ("$badgeid", "$paneltopicsE", "$otherideasE", "$suggestedguestsE") 
+ON DUPLICATE KEY UPDATE 
+    badgeid = VALUES(badgeid),
+    paneltopics = VALUES(paneltopics),
+    otherideas = VALUES(otherideas),
+    suggestedguests = VALUES(suggestedguests);
 EOD;
 if (!mysqli_query_exit_on_error($query)) {
     exit(); // Should have exited already
 }
 renderMySuggestions($title, $error, $message, $paneltopics, $otherideas, $suggestedguests);
-?>

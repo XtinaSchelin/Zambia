@@ -6,7 +6,7 @@ require_once('StaffCommonCode.php');
 $CON_NAME = CON_NAME;
 $reportcategoryid = getString("reportcategory");
 $prevErrorLevel = error_reporting();
-$tempErrorLevel = $prevErrorLevel && ~ E_WARNING;
+$tempErrorLevel = $prevErrorLevel && ~E_WARNING;
 error_reporting($tempErrorLevel);
 $includeFile = 'staffReportsInCategoryInclude.php';
 if (!include $includeFile) {
@@ -35,4 +35,3 @@ if ($reportcategoryid === "") {
 }
 echo "</dl>\n";
 staff_footer();
-?>

@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2009-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function render_session_interests($session_interest_count,$message,$message_error, $pageIsDirty, $showNotAttendingWarning) {
+function render_session_interests($session_interest_count, $message, $message_error, $pageIsDirty, $showNotAttendingWarning)
+{
     global $session_interests, $title;
     participant_header($title);
     if ($showNotAttendingWarning) {
@@ -41,7 +42,7 @@ function render_session_interests($session_interest_count,$message,$message_erro
     echo "<hr />\n";
     // "Update Ranks" Section
     echo "<form id=\"sessionFRM\" class=\"form-inline\" name=\"sessionform\" method=\"POST\" action=\"PartPanelInterests_POST2.php\">\n";
-	echo "<input type=\"hidden\" name=\"submitranks\" value=\"1\" />\n";
+    echo "<input type=\"hidden\" name=\"submitranks\" value=\"1\" />\n";
     echo "<div class=\"submit\"><button class=\"btn btn-primary pull-right\" type=\"submit\" $disabled>Save</button></div>\n";
     echo "<p>Please use the following scale when ranking your interest in the sessions you have chosen:  </p>\n";
     echo "<strong>1 &mdash;<em> Oooh! Oh! Pick Me!</em>&nbsp;&nbsp;&nbsp;2-3 &mdash; <em>I'd like to if I can</em>&nbsp;&nbsp;&nbsp;4-5 &ndash; <em>I am qualified but this is not one of my primary interests</em></strong>\n";
@@ -65,11 +66,11 @@ function render_session_interests($session_interest_count,$message,$message_erro
         echo "            <input type=\"text\" id=\"rankINP_$j\" size=\"2\" class=\"rankINP\" name=\"rank$j\" value=\"{$session_interests[$i]['rank']}\" $disabled/>\n";
         echo "        </label>\n";
         echo "        <span class=\"span5\">\n";
-        echo "            <input type=\"checkbox\" id=\"modCHK_$j\" class=\"checkbox\" value=\"1\" name=\"mod$j\" ".(($session_interests[$i]['willmoderate'])?"checked":"")." $disabled/>\n";
+        echo "            <input type=\"checkbox\" id=\"modCHK_$j\" class=\"checkbox\" value=\"1\" name=\"mod$j\" " . (($session_interests[$i]['willmoderate']) ? "checked" : "") . " $disabled/>\n";
         echo "            <label class=\"inline\">I'd like to moderate this session </label>\n";
         echo "        </span>\n";
         echo "        <span class=\"span4\">\n";
-        echo "            <input type=\"checkbox\" id=\"deleteCHK_$j\" class=\"checkbox\" value=\"1\" name=\"delete$j\" $disabled/>\n";		
+        echo "            <input type=\"checkbox\" id=\"deleteCHK_$j\" class=\"checkbox\" value=\"1\" name=\"delete$j\" $disabled/>\n";
         echo "            <label class=\"inline \">Remove this session from my list </label>\n";
         echo "        </span>\n";
         echo "    </div>\n";
@@ -78,7 +79,7 @@ function render_session_interests($session_interest_count,$message,$message_erro
         echo "        <label class=\"span11 control-label\">Use this space to convince us why you would be fabulous on this session: </label>";
         echo "    </div>\n";
         echo "    <div class=\"controls controls-row padded\">\n";
-        echo "        <textarea id=\"commentsTXTA_$j\" class=\"span12 sessionWhyMe\" cols=\"80\" name=\"comments$j\" $disabled>". htmlspecialchars( $session_interests[$i]['comments'],ENT_COMPAT)."</textarea>\n";
+        echo "        <textarea id=\"commentsTXTA_$j\" class=\"span12 sessionWhyMe\" cols=\"80\" name=\"comments$j\" $disabled>" . htmlspecialchars($session_interests[$i]['comments'], ENT_COMPAT) . "</textarea>\n";
         echo "    </div>\n";
         echo "    <div class=\"controls controls-row padded\">\n";
         echo "        <span class=\"span1\"></span>\n";
@@ -96,7 +97,7 @@ function render_session_interests($session_interest_count,$message,$message_erro
     }
     echo "</div>\n";
     echo "<div class=\"submit\"><button class=\"btn btn-primary pull-right\" type=\"submit\" $disabled>Save</button></div><br />\n";
-	echo "<input type=\"hidden\" id=\"autosaveHID\" name=\"autosave\" value=\"0\" />\n";
+    echo "<input type=\"hidden\" id=\"autosaveHID\" name=\"autosave\" value=\"0\" />\n";
     echo "</form>\n";
     echo "<div id=\"addButDirtyMOD\" class=\"modal hide\" data-backdrop=\"static\">\n";
     echo "  <div class=\"modal-header\">\n";
@@ -127,4 +128,3 @@ function render_session_interests($session_interest_count,$message,$message_erro
     echo "</div>\n";
     participant_footer();
 }
-?>

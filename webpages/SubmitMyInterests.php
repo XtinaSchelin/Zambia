@@ -78,4 +78,3 @@ $error = false;
 renderMyInterests($title, $error, $message, $rolearray);
 participant_footer();
 exit(0);
-?>        

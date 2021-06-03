@@ -106,13 +106,12 @@ if ($valuesClause2) {
 if ($credentialClause3) {
     mysqli_query_with_error_handling($query3 . $credentialClause3 . ")", true, true);
 }
-echo("<span class=\"alert alert-success\">");
+echo ("<span class=\"alert alert-success\">");
 if ($password) {
     echo "Password updated. ";
     $_SESSION['password'] = $password;
 }
-echo("Database updated successfully. </span>\n");
+echo ("Database updated successfully. </span>\n");
 if ($pubsname)
     $_SESSION['badgename'] = $pubsname;
 exit();
-?>

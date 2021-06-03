@@ -4,22 +4,27 @@ require_once('db_functions.php');
 require_once('StaffCommonCode.php');
 
 // gets data for a participant to be displayed.  Returns as XML
-function fetch_participant() {
+function fetch_participant()
+{
     global $message_error;
     $fbadgeid = getInt("badgeid");
     if (!$fbadgeid) {
         exit();
     }
     $query["fetchParticipants"] = <<<EOD
-SELECT
-        P.badgeid, P.pubsname, P.interested, P.bio, P.staff_notes, CD.firstname, CD.lastname, CD.badgename
-    FROM
-			 Participants P
-		JOIN CongoDump CD ON P.badgeid = CD.badgeid
-    WHERE
-        P.badgeid = "$fbadgeid"
-    ORDER BY
-        CD.lastname, CD.firstname
+SELECT P.badgeid,
+       P.pubsname,
+       P.interested,
+       P.bio,
+       P.staff_notes,
+       CD.firstname,
+       CD.lastname,
+       CD.badgename
+FROM Participants P
+JOIN CongoDump CD ON P.badgeid = CD.badgeid
+WHERE P.badgeid = "$fbadgeid"
+ORDER BY CD.lastname,
+         CD.firstname
 EOD;
     $resultXML = mysql_query_XML($query);
     if (!$resultXML) {
@@ -27,11 +32,12 @@ EOD;
         exit();
     }
     header("Content-Type: text/xml");
-    echo($resultXML->saveXML());
+    echo ($resultXML->saveXML());
     exit();
 }
 
-function update_participant() {
+function update_participant()
+{
     global $linki, $message_error;
     $partid = mysqli_real_escape_string($linki, getString("badgeid"));
     $password = getString("password");
@@ -67,10 +73,10 @@ function update_participant() {
     if ($interested == 2) {
         $query = <<<EOD
 UPDATE ParticipantOnSessionHistory
-    SET inactivatedts = NOW(), inactivatedbybadgeid = "{$_SESSION['badgeid']}"
-	WHERE
-	        badgeid = "$partid"
-		AND inactivatedts IS NULL;
+SET inactivatedts = NOW(),
+    inactivatedbybadgeid = "{$_SESSION['badgeid']}"
+WHERE badgeid = "$partid"
+  AND inactivatedts IS NULL;
 EOD;
         if (!mysqli_query_with_error_handling($query)) {
             return;
@@ -80,38 +86,47 @@ EOD;
     echo $message;
 }
 
-function perform_search() {
+function perform_search()
+{
     global $linki, $message_error;
     $searchString = mysqli_real_escape_string($linki, (getString("searchString")));
     if ($searchString == "")
         exit();
     if (is_numeric($searchString)) {
         $query["searchParticipants"] = <<<EOD
-			SELECT
-			        P.badgeid, P.pubsname, P.interested, P.bio, P.staff_notes, CD.firstname, CD.lastname, CD.badgename
-			    FROM
-						 Participants P
-					JOIN CongoDump CD ON P.badgeid = CD.badgeid
-			    WHERE
-			        P.badgeid = "$searchString"
-			    ORDER BY
-			        CD.lastname, CD.firstname
+SELECT P.badgeid,
+       P.pubsname,
+       P.interested,
+       P.bio,
+       P.staff_notes,
+       CD.firstname,
+       CD.lastname,
+       CD.badgename
+FROM Participants P
+JOIN CongoDump CD ON P.badgeid = CD.badgeid
+WHERE P.badgeid = "$searchString"
+ORDER BY CD.lastname,
+         CD.firstname;
 EOD;
     } else {
         $searchString = '%' . $searchString . '%';
         $query["searchParticipants"] = <<<EOD
-			SELECT
-			        P.badgeid, P.pubsname, P.interested, P.bio, P.staff_notes, CD.firstname, CD.lastname, CD.badgename
-			    FROM
-						 Participants P
-					JOIN CongoDump CD ON P.badgeid = CD.badgeid
-			    WHERE
-			           P.pubsname LIKE "$searchString"
-					OR CD.lastname LIKE "$searchString"
-					OR CD.firstname LIKE "$searchString"
-					OR CD.badgename LIKE "$searchString"
-			    ORDER BY
-			        CD.lastname, CD.firstname
+SELECT P.badgeid,
+       P.pubsname,
+       P.interested,
+       P.bio,
+       P.staff_notes,
+       CD.firstname,
+       CD.lastname,
+       CD.badgename
+FROM Participants P
+JOIN CongoDump CD ON P.badgeid = CD.badgeid
+WHERE P.pubsname LIKE "$searchString"
+  OR CD.lastname LIKE "$searchString"
+  OR CD.firstname LIKE "$searchString"
+  OR CD.badgename LIKE "$searchString"
+ORDER BY CD.lastname,
+         CD.firstname;
 EOD;
     }
     $xml = mysql_query_XML($query);
@@ -120,23 +135,23 @@ EOD;
         exit();
     }
     $xpath = new DOMXpath($xml);
-	$searchParticipantsResultRowElements = $xpath->query("/doc/query[@queryName='searchParticipants']/row");
+    $searchParticipantsResultRowElements = $xpath->query("/doc/query[@queryName='searchParticipants']/row");
     foreach ($searchParticipantsResultRowElements as $resultRowElement) {
-    	$badgeid = $resultRowElement -> getAttribute("badgeid");
-    	$jsEscapedBadgeid = addslashes($badgeid);
-		$resultRowElement -> setAttribute('jsEscapedBadgeid', $jsEscapedBadgeid);
-	}
-	$xsl = new DomDocument;
-	$xsl->load('xsl/AdminParticipants.xsl');
-	$xslt = new XsltProcessor();
-	$xslt->importStylesheet($xsl);
-	if ($html = $xslt->transformToXML($xml)) {
-	    header("Content-Type: text/html"); 
-	    echo $html;
-	} else {
-	    trigger_error('XSL transformation failed.', E_USER_ERROR);
-	}
-	exit();
+        $badgeid = $resultRowElement->getAttribute("badgeid");
+        $jsEscapedBadgeid = addslashes($badgeid);
+        $resultRowElement->setAttribute('jsEscapedBadgeid', $jsEscapedBadgeid);
+    }
+    $xsl = new DomDocument;
+    $xsl->load('xsl/AdminParticipants.xsl');
+    $xslt = new XsltProcessor();
+    $xslt->importStylesheet($xsl);
+    if ($html = $xslt->transformToXML($xml)) {
+        header("Content-Type: text/html");
+        echo $html;
+    } else {
+        trigger_error('XSL transformation failed.', E_USER_ERROR);
+    }
+    exit();
 }
 
 // Start here.  Should be AJAX requests only
@@ -158,5 +173,3 @@ switch ($ajax_request_action) {
     default:
         exit();
 }
-
-?>

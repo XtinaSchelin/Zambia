@@ -1,7 +1,8 @@
 <?php
 //	Copyright (c) 2011-2017 Peter Olszowka. All rights reserved. See copyright document for more details.
 
-function StaffRenderErrorPage($title, $message) {
+function StaffRenderErrorPage($title, $message)
+{
     global $debug;
     require_once('StaffHeader.php');
     require_once('StaffFooter.php');
@@ -13,7 +14,8 @@ function StaffRenderErrorPage($title, $message) {
     staff_footer();
 }
 
-function PartRenderErrorPage($title, $message) {
+function PartRenderErrorPage($title, $message)
+{
     require_once('ParticipantHeader.php');
     require_once('ParticipantFooter.php');
     participant_header($title);
@@ -21,7 +23,8 @@ function PartRenderErrorPage($title, $message) {
     participant_footer();
 }
 
-function BrainstormRenderErrorPage($title, $message) {
+function BrainstormRenderErrorPage($title, $message)
+{
     require_once('BrainstormHeader.php');
     require_once('BrainstormFooter.php');
     brainstorm_header($title);
@@ -29,7 +32,8 @@ function BrainstormRenderErrorPage($title, $message) {
     brainstorm_footer();
 }
 
-function RenderError($message_error, $ajax = false) {
+function RenderError($message_error, $ajax = false)
+{
     global $header_used, $title;
     if ($ajax) {
         RenderErrorAjax($message_error);
@@ -82,8 +86,7 @@ function RenderError($message_error, $ajax = false) {
     echo "</html>\n";
 }
 
-function RenderErrorAjax($message_error) {
+function RenderErrorAjax($message_error)
+{
     echo "<div class=\"error-container alert\"><span>$message_error</span></div>\n";
 }
-
-?>

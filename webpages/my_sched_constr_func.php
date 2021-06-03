@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2015-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function convert_timestamp_to_timeindex($timesXPath, $timestamp, $start) {
+function convert_timestamp_to_timeindex($timesXPath, $timestamp, $start)
+{
     // $timestamp in hh:mm:ss or hhh:mm:ss from start of con
     // start = 1 if starttime; 0 if endtime
     $hour = 0 + substr($timestamp, 0, strlen($timestamp) - 6); // get 1st 2 if hh:mm:ss or 1st 3 if hhh:mm:ss
@@ -26,21 +27,20 @@ function convert_timestamp_to_timeindex($timesXPath, $timestamp, $start) {
     return (array("day" => $day, "hour" => $timesIndex));
 }
 
-function retrieve_timesXML() {
+function retrieve_timesXML()
+{
     global $message_error;
     $result = array();
     $query = array();
-	$query["times"] = "SELECT timeid, DATE_FORMAT(timevalue,'%T') AS timevalue, timedisplay, next_day, avail_start, avail_end FROM Times ";
-	$query["times"] .= "WHERE avail_start = 1 or avail_end = 1";
-	if (!$result["XML"] = mysql_query_XML($query)) {
+    $query["times"] = "SELECT timeid, DATE_FORMAT(timevalue,'%T') AS timevalue, timedisplay, next_day, avail_start, avail_end FROM Times ";
+    $query["times"] .= "WHERE avail_start = 1 or avail_end = 1";
+    if (!$result["XML"] = mysql_query_XML($query)) {
         RenderError($message_error);
         exit();
     }
-	$result["XPath"] = new DOMXPath($result["XML"]);
-	$result["variablesNode"] = $result["XML"]->createElement("variables");
-	$docNode = $result["XML"]->getElementsByTagName("doc")->item(0);
-	$result["variablesNode"] = $docNode->appendChild($result["variablesNode"]);
-	return $result;
+    $result["XPath"] = new DOMXPath($result["XML"]);
+    $result["variablesNode"] = $result["XML"]->createElement("variables");
+    $docNode = $result["XML"]->getElementsByTagName("doc")->item(0);
+    $result["variablesNode"] = $docNode->appendChild($result["variablesNode"]);
+    return $result;
 }
-
-?>

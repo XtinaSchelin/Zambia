@@ -1,7 +1,8 @@
 //	Created by Peter Olszowka on 2019-11-19;
 //	Copyright (c) 2019 The Peter Olszowka. All rights reserved. See copyright document for more details.
 
-var InviteParticipants = function() {
+// TODO Convert this to a class.
+var InviteParticipants = function () {
     this.initialize = function initialize() {
         //called when page has loaded
         var $participantSelect = document.getElementById('participant-select');

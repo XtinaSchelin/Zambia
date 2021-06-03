@@ -1,7 +1,8 @@
 <?php
 //	Copyright (c) 2009-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
 
-function validate_suggestions($paneltopics, $otherideas, $suggestedguests) {
+function validate_suggestions($paneltopics, $otherideas, $suggestedguests)
+{
     $retval = ""; // return "" means "passed"
     if (strlen($paneltopics) > 10000) {
         $retval .= "Please edit your Program Topic Ideas to fewer than 10,000 characters. ";
@@ -12,7 +13,7 @@ function validate_suggestions($paneltopics, $otherideas, $suggestedguests) {
     if (strlen($suggestedguests) > 10000) {
         $retval .= "Please edit your Suggested Guests to fewer than 10,000 characters. ";
     }
-    return($retval);
+    return ($retval);
 }
 
 // Function validate_session_interests($max_si_row)
@@ -20,7 +21,8 @@ function validate_suggestions($paneltopics, $otherideas, $suggestedguests) {
 // If a test fails, then the global $message is populated
 // with the HTML of an error message.
 //
-function validate_session_interests($max_si_row) {
+function validate_session_interests($max_si_row)
+{
     global $session_interests, $message;
     $flag = true;
     $message = "";
@@ -49,7 +51,8 @@ function validate_session_interests($max_si_row) {
 //First checks that $sessionid is a valid integer which could be a session
 //Then checks db that it is a session which is eligible for participant to sign up.
 
-function validate_add_session_interest($sessionid, $badgeid, $mode) {
+function validate_add_session_interest($sessionid, $badgeid, $mode)
+{
     global $message, $title;
     if (!($mode == ParticipantAddSession or $mode == StaffInviteSession)) {
         $message = "Function validate_add_session_interest called with invalid mode.<BR>\n";
@@ -60,17 +63,14 @@ function validate_add_session_interest($sessionid, $badgeid, $mode) {
         return (false);
     }
     $query = <<<EOD
-SELECT
-        S.sessionid
-    FROM
-             Sessions S
-        JOIN Tracks T USING (trackid)
-        JOIN SessionStatuses SS USING (statusid)
-    WHERE
-            T.selfselect=1
-        AND SS.may_be_scheduled=1
-        AND S.invitedguest=0
-        AND S.sessionid=$sessionid;
+SELECT S.sessionid
+FROM Sessions S
+JOIN Tracks T USING (trackid)
+JOIN SessionStatuses SS USING (statusid)
+WHERE T.selfselect=1
+  AND SS.may_be_scheduled = 1
+  AND S.invitedguest = 0
+  AND S.sessionid = $sessionid;
 EOD;
     if (!$result = mysqli_query_exit_on_error($query)) {
         exit(); // Should have exited already
@@ -80,13 +80,10 @@ EOD;
         return (false);
     }
     $query = <<<EOD
-SELECT
-        sessionid
-    FROM
-        ParticipantSessionInterest
-    WHERE
-            sessionid=$sessionid
-        AND badgeid='$badgeid';
+SELECT sessionid
+FROM ParticipantSessionInterest
+WHERE sessionid = $sessionid
+  AND badgeid = '$badgeid';
 EOD;
     if (!$result = mysqli_query_exit_on_error($query)) {
         exit(); // Should have exited already
@@ -100,7 +97,8 @@ EOD;
 
 // Tracy's old version
 
-function is_email($email) {
+function is_email($email)
+{
     $x = '\d\w!\#\$%&\'*+\-/=?\^_`{|}~';    //just for clarity
     return count($email = explode('@', $email, 3)) == 2
         && strlen($email[0]) < 65
@@ -117,28 +115,30 @@ function is_email($email) {
 //    return preg_match($pattern,$email);
 //    }
 
-function validate_name_email($name, $email) {
+function validate_name_email($name, $email)
+{
     global $messages;
-    $status=true;
-// only perform test for brainstorm user
+    $status = true;
+    // only perform test for brainstorm user
     if (may_I("Staff") || may_I("Participant")) {
         return ($status);
-        }
-    if (strlen($name)<3) {
-        $status=false;
-        $messages.="Please enter a name of at least 3 characters.<BR>\n";
-        }
-    if (!(is_email($email))) {
-        $status=false;
-        $messages.="Please enter a valid email address.<BR>\n";
-        }
-    return ($status);
     }
+    if (strlen($name) < 3) {
+        $status = false;
+        $messages .= "Please enter a name of at least 3 characters.<BR>\n";
+    }
+    if (!(is_email($email))) {
+        $status = false;
+        $messages .= "Please enter a valid email address.<BR>\n";
+    }
+    return ($status);
+}
 // Function validate_integer($input,$min,$max)
 // Return true if input is integer within range (inclusive)
 // otherwise false
 //
-function validate_integer($input, $min, $max) {
+function validate_integer($input, $min, $max)
+{
     return filter_var(
         $input,
         FILTER_VALIDATE_INT,
@@ -151,7 +151,8 @@ function validate_integer($input, $min, $max) {
 // If a test fails, then the global $message is populated
 // with the HTML of an error message.
 //
-function validate_session() {
+function validate_session()
+{
     // may be incomplete!!
     global $session, $messages;
     $flag = true;
@@ -169,7 +170,7 @@ function validate_session() {
         $flag = false;
     }
     if (!($sstatus[$session["status"]]['validate'])) {
-//don't validate further those not marked with 'validate' such as "dropped" or "cancelled"
+        //don't validate further those not marked with 'validate' such as "dropped" or "cancelled"
         return ($flag);
     }
     $i = strlen($session["title"]);
@@ -184,10 +185,10 @@ function validate_session() {
         $flag = false;
     }
     if (!($sstatus[$session["status"]]['may_be_scheduled'])) {
-//don't validate further those not marked with 'may_be_scheduled'.
+        //don't validate further those not marked with 'may_be_scheduled'.
         return ($flag);
     }
-//most stringent validation for those which may be scheduled.
+    //most stringent validation for those which may be scheduled.
     if ($session["pubstatusid"] == 0) {
         $messages .= "Please select a publication status.<br>\n";
         $flag = false;
@@ -223,7 +224,8 @@ function validate_session() {
 // strictly monotonically increasing with the index--start and end are part of same
 // monotonic sequence.
 //
-function validate_participant_availability() {
+function validate_participant_availability()
+{
     global $partAvail, $messages;
     $flag = true;
     $messages = "";
@@ -235,8 +237,8 @@ function validate_participant_availability() {
     if (CON_NUM_DAYS > 1) {
         for ($i = 1; $i <= CON_NUM_DAYS; $i++) {
             if (!is_numeric($partAvail["maxprogday$i"])) {
-                $messages.="Enter a number in the day maximum fields.<BR>\n";
-                $flag=false;
+                $messages .= "Enter a number in the day maximum fields.<BR>\n";
+                $flag = false;
                 break;
             }
             if (!($partAvail["maxprogday$i"] >= 0 and $partAvail["maxprogday$i"] <= PREF_DLY_SESNS_LMT)) {
@@ -297,9 +299,6 @@ function validate_participant_availability() {
                 break;
             }
         }
-
     }
     return ($flag);
 }
-
-?>

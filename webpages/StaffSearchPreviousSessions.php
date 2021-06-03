@@ -10,4 +10,3 @@ $message = "";
 $message_error = "";
 RenderSearchPreviousSessions();
 staff_footer();
-?>

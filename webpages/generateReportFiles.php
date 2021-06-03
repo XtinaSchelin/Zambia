@@ -7,13 +7,15 @@ if (!$timeLimitSuccess) {
     RenderError("Error extending time limit.");
     exit();
 }
-$query =<<<EOD
-SELECT
-        reporttypeid, title, description, filename, xsl, display_order
-    FROM
-        ReportTypes
-    WHERE
-        oldmechanism = 0;
+$query = <<<EOD
+SELECT reporttypeid,
+       title,
+       description,
+       filename,
+       xsl,
+       display_order
+FROM ReportTypes
+WHERE oldmechanism = 0;
 EOD;
 if (!$result = mysqli_query_with_error_handling($query, true)) {
     exit(); // should have exited already
@@ -31,14 +33,13 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
     ];
 }
 mysqli_free_result($result);
-$query =<<<EOD
-SELECT
-        RQ.reporttypeid, RQ.queryname, RQ.query
-    FROM
-             ReportTypes RT
-        JOIN ReportQueries RQ USING (reporttypeid)
-    WHERE
-        RT.oldmechanism = 0;
+$query = <<<EOD
+SELECT RQ.reporttypeid,
+       RQ.queryname,
+       RQ.query
+FROM ReportTypes RT
+JOIN ReportQueries RQ USING (reporttypeid)
+WHERE RT.oldmechanism = 0;
 EOD;
 if (!$result = mysqli_query_with_error_handling($query, true)) {
     exit(); // should have exited already 
@@ -47,15 +48,13 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
     $reportTypes[$row['reporttypeid']]['queries'][$row['queryname']] = $row['query'];
 }
 mysqli_free_result($result);
-$query =<<<EOD
-SELECT
-        CHR.reporttypeid, RC.description
-    FROM
-             ReportTypes RT
-        JOIN CategoryHasReport CHR USING(reporttypeid)
-        JOIN ReportCategories RC USING(reportcategoryid)
-    WHERE
-        RT.oldmechanism = 0;
+$query = <<<EOD
+SELECT CHR.reporttypeid,
+       RC.description
+FROM ReportTypes RT
+JOIN CategoryHasReport CHR USING(reporttypeid)
+JOIN ReportCategories RC USING(reportcategoryid)
+WHERE RT.oldmechanism = 0;
 EOD;
 if (!$result = mysqli_query_with_error_handling($query, true)) {
     exit(); // should have exited already

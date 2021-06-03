@@ -75,4 +75,3 @@ if ($status === "1" || $status === "2") {
     $emailverify['body'] = str_replace($scheduleTag, $scheduleInfo, $emailverify['body']);
 }
 render_verify_email($email, $emailverify, $message_warning = "");
-?>

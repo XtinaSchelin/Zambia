@@ -6,4 +6,3 @@ define("StaffInviteSession", 1001);
 define("HEADER_BRAINSTORM", 2001);
 define("HEADER_PARTICIPANT", 2002);
 define("HEADER_STAFF", 2003);
-?>

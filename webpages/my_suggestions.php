@@ -5,12 +5,11 @@ $title = "My Suggestions";
 require('PartCommonCode.php'); // set $badgeid from session
 require_once('renderMySuggestions.php');
 $query = <<<EOB
-SELECT
-        paneltopics, otherideas, suggestedguests
-    FROM
-        ParticipantSuggestions
-    WHERE
-        badgeid = "$badgeid";
+SELECT paneltopics,
+       otherideas,
+       suggestedguests
+FROM ParticipantSuggestions
+WHERE badgeid = "$badgeid";
 EOB;
 if (!$result = mysqli_query_exit_on_error($query)) {
     exit(); // should have exited already
@@ -31,4 +30,3 @@ if ($rows == 0) {
 $error = false;
 $message = "";
 renderMySuggestions($title, $error, $message, $paneltopics, $otherideas, $suggestedguests);
-?>

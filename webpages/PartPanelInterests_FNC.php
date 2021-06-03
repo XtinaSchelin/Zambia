@@ -6,11 +6,17 @@
 // ['sessionid'] ['rank'] ['willmoderate'] ['comments']
 // and populates $session_interest_index
 //
-function get_session_interests_from_db($badgeid) {
+function get_session_interests_from_db($badgeid)
+{
     global $session_interests, $session_interest_index;
     $query = <<<EOD
-SELECT sessionid, rank, willmoderate, comments FROM ParticipantSessionInterest
-    WHERE badgeid='$badgeid' ORDER BY IFNULL(rank,9999), sessionid
+SELECT sessionid,
+       rank,
+       willmoderate,
+       comments
+FROM ParticipantSessionInterest
+WHERE badgeid = '$badgeid'
+ORDER BY IFNULL(rank,9999), sessionid
 EOD;
     if (!$result = mysqli_query_exit_on_error($query)) {
         exit(); // Should have exited already
@@ -31,7 +37,8 @@ EOD;
 // Populates global $session_interest with
 // ['trackname'] ['title'] ['duration'] ['progguiddesc'] ['persppartinfo']
 //
-function get_si_session_info_from_db($session_interest_count) {
+function get_si_session_info_from_db($session_interest_count)
+{
     global $message, $session_interests, $session_interest_index, $title;
     //print_r($session_interest_index);
     if ($session_interest_count == 0) {
@@ -42,27 +49,23 @@ function get_si_session_info_from_db($session_interest_count) {
         $sessionidlist .= $session_interests[$i]['sessionid'] . ", ";
     }
     $sessionidlist = substr($sessionidlist, 0, -2); // drop extra trailing ", "
-// If session for which participant is interested no longer has status valid for signup, then don't retrieve
+    // If session for which participant is interested no longer has status valid for signup, then don't retrieve
     $query = <<<EOD
-SELECT
-        S.sessionid,
-        T.trackname,
-        S.title,
-        CASE
-            WHEN (minute(S.duration)=0) THEN date_format(S.duration,'%l hr')
-            WHEN (hour(S.duration)=0) THEN date_format(S.duration, '%i min')
-            ELSE date_format(S.duration,'%l hr, %i min')
-            END
-            as duration,
-        S.progguiddesc,
-        S.persppartinfo
-    FROM
-        Sessions S JOIN
-        Tracks T using (trackid) JOIN
-        SessionStatuses SS using (statusid)
-    WHERE
-        S.sessionid in ($sessionidlist) and
-        SS.may_be_scheduled=1
+SELECT S.sessionid,
+       T.trackname,
+       S.title,
+       CASE
+           WHEN (minute(S.duration)=0) THEN date_format(S.duration,'%l hr')
+           WHEN (hour(S.duration)=0) THEN date_format(S.duration, '%i min')
+           ELSE date_format(S.duration,'%l hr, %i min')
+       END AS duration,
+       S.progguiddesc,
+       S.persppartinfo
+FROM Sessions S
+JOIN Tracks T using (trackid)
+JOIN SessionStatuses SS using (statusid)
+WHERE S.sessionid IN ($sessionidlist)
+  AND SS.may_be_scheduled = 1;
 EOD;
     if (!$result = mysqli_query_with_error_handling($query)) {
         $message .= $query . "<br>Error querying database.<br>";
@@ -88,7 +91,8 @@ EOD;
 // the $partavail global variable with it.  Returns
 // the maximum index value.
 //
-function get_session_interests_from_post() {
+function get_session_interests_from_post()
+{
     global $session_interests, $session_interest_index;
     $i = 1;
     while (isset($_POST["sessionid$i"])) {
@@ -111,7 +115,8 @@ function get_session_interests_from_post() {
 // the $partavail global variable with it.  Returns
 // the maximum index value.
 //
-function update_session_interests_in_db($badgeid, $session_interest_count) {
+function update_session_interests_in_db($badgeid, $session_interest_count)
+{
     global $linki, $session_interests, $title, $message;
     //print_r($session_interests);
     $deleteSessionIds = "";
@@ -153,5 +158,3 @@ function update_session_interests_in_db($badgeid, $session_interest_count) {
     }
     return (true);
 }
-
-?>

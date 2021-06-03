@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2005-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function RenderSearchSessionResults($trackidlist, $statusidlist, $typeidlist, $sessionid, $divisionid, $searchtitle) {
+function RenderSearchSessionResults($trackidlist, $statusidlist, $typeidlist, $sessionid, $divisionid, $searchtitle)
+{
     require_once('retrieve.php');
     require_once('render_functions.php');
     $title = 'Precis Search Results';
@@ -13,4 +14,3 @@ function RenderSearchSessionResults($trackidlist, $statusidlist, $typeidlist, $s
         exit();
     }
 }
-?>

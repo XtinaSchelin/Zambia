@@ -1,5 +1,5 @@
 //	Copyright (c) 2011-2019 Peter Olszowka. All rights reserved. See copyright document for more details.
-$(document).ready(function() {
+$(document).ready(function () {
 	//this function is run whenever any page finishes loading if JQuery has been loaded
 	//debugger;
 	//client variable thisPage set to server variable $title in files ParticipantHeader.php and StaffHeader.php
@@ -20,7 +20,7 @@ $(document).ready(function() {
 			panelInterests.initialize();
 			break;
 		default:
-			window.status="Ready.";
+			window.status = "Ready.";
 		/**
 		 * These js files initialize themselves and therefore should be included only on the relevant pages.
 		 * See javascript_functions.php
@@ -28,7 +28,7 @@ $(document).ready(function() {
 		 * Session History -- SessionHistory.js
 		 * Invite Participants -- InviteParticipants.js
 		 * (Staff) Assign Participants -- StaffAssignParticipants.js
-         * Maintain Room Schedule -- MaintainRoomSched.js
+		 * Maintain Room Schedule -- MaintainRoomSched.js
 		 */
 	}
 	if (getValue('zambiaHeader') == 'small' && !alwaysShowLargeHeader) {
@@ -38,19 +38,19 @@ $(document).ready(function() {
 		$('#altHeader').hide();
 		$('#regHeader').show();
 	}
-	$('#hideHeader').click(function() {
+	$('#hideHeader').click(function () {
 		$('#regHeader').slideUp();
 		$('#altHeader').show();
 		setValue('zambiaHeader', 'small');
-		window.setTimeout(staffMaintainSchedule.resizeMe,300);
-		window.setTimeout(staffMaintainSchedule.resizeMe,600);
+		window.setTimeout(staffMaintainSchedule.resizeMe, 300);
+		window.setTimeout(staffMaintainSchedule.resizeMe, 600);
 	});
-	$('#showHeader').click(function() {
+	$('#showHeader').click(function () {
 		$('#altHeader').hide();
 		$('#regHeader').slideDown();
 		setValue('zambiaHeader', 'large');
-		window.setTimeout(staffMaintainSchedule.resizeMe,300);
-		window.setTimeout(staffMaintainSchedule.resizeMe,600);
+		window.setTimeout(staffMaintainSchedule.resizeMe, 300);
+		window.setTimeout(staffMaintainSchedule.resizeMe, 600);
 	});
 });
 
@@ -84,10 +84,11 @@ function clearValue(key) {
 
 var lib = new Lib;
 
+// TODO Convert to a class.
 function Lib() {
 	this.toggleCheckbox = function toggleCheckbox() {
 		var thecheckbox = $(this).find(":checkbox");
-		thecheckbox.prop("checked",!thecheckbox.prop("checked"));
+		thecheckbox.prop("checked", !thecheckbox.prop("checked"));
 		thecheckbox.triggerHandler("click");
 	};
 	this.onePageResize = function onePageResize() {

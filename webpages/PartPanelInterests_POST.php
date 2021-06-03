@@ -40,5 +40,4 @@ if (!validate_add_session_interest($addsessionid, $badgeid, ParticipantAddSessio
 $session_interest_count = get_session_interests_from_db($badgeid); // Returns count; Will render its own errors
 // Get title, etc. of such data -- use global $session_interests
 get_si_session_info_from_db($session_interest_count); // Will render its own errors
-    render_session_interests($session_interest_count, $message, $message_error, false, false); // includes footer
-?>
+render_session_interests($session_interest_count, $message, $message_error, false, false); // includes footer

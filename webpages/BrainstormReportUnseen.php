@@ -7,20 +7,23 @@ require_once('BrainstormHeader.php');
 require_once('BrainstormFooter.php');
 $title = "New (Unseen) Suggestions";
 $query = <<<EOD
-SELECT
-        S.sessionid, TR.trackname, NULL typename, S.title, 
-        concat( if(left(S.duration,2)=00, '', 
-                if(left(S.duration,1)=0, concat(right(left(S.duration,2),1),'hr '), concat(left(S.duration,2),'hr '))),
-                if(date_format(S.duration,'%i')=00, '', 
-                if(left(date_format(S.duration,'%i'),1)=0, concat(right(date_format(S.duration,'%i'),1),'min'), 
-                concat(date_format(S.duration,'%i'),'min')))) as Duration,
-        S.estatten, S.progguiddesc, S.persppartinfo, null as roomname, null as starttime, SS.statusname
-    FROM
-             Sessions S
-        JOIN Tracks TR USING (trackid)
-        JOIN SessionStatuses SS USING (statusid)
-    WHERE SS.statusname = 'Brainstorm'
-    ORDER BY trackname, title;
+SELECT S.sessionid,
+       TR.trackname,
+       NULL typename,
+            S.title,
+            concat(if(left(S.duration, 2)=00, '', if(left(S.duration, 1)=0, concat(right(left(S.duration, 2), 1), 'hr '), concat(left(S.duration, 2), 'hr '))), if(date_format(S.duration, '%i')=00, '', if(left(date_format(S.duration, '%i'), 1)=0, concat(right(date_format(S.duration, '%i'), 1), 'min'), concat(date_format(S.duration, '%i'), 'min')))) AS Duration,
+            S.estatten,
+            S.progguiddesc,
+            S.persppartinfo,
+            NULL AS roomname,
+            NULL AS starttime,
+            SS.statusname
+FROM Sessions S
+JOIN Tracks TR USING (trackid)
+JOIN SessionStatuses SS USING (statusid)
+WHERE SS.statusname = 'Brainstorm'
+ORDER BY trackname,
+         title;
 EOD;
 if (($result = mysqli_query_exit_on_error($query)) === false) {
     exit(); // Should have exited already.
@@ -31,5 +34,3 @@ echo "This list is sorted by Track and then Title.";
 RenderPrecis($result, false);
 brainstorm_footer();
 exit();
-?> 
-

@@ -8,14 +8,14 @@ require_once('email_functions.php');
 require_once(AUTOLOAD);
 global $title, $message, $link;
 if (isset($_POST['sendto'])) { // page has been visited before
-// restore previous values to form
+    // restore previous values to form
     $email = get_email_from_post();
 } else { // page hasn't just been visited
     $email = set_email_defaults();
 }
 $message_warning = "";
-if (empty($_POST['navigate']) || $_POST['navigate']!='send') {
-    render_send_email($email,$message_warning);
+if (empty($_POST['navigate']) || $_POST['navigate'] != 'send') {
+    render_send_email($email, $message_warning);
     exit(0);
 }
 // put code to send email here.
@@ -23,8 +23,8 @@ if (empty($_POST['navigate']) || $_POST['navigate']!='send') {
 $title = "Staff Send Email";
 $timeLimitSuccess = set_time_limit(600);
 if (!$timeLimitSuccess) {
-	RenderError("Error extending time limit.");
-	exit(0);
+    RenderError("Error extending time limit.");
+    exit(0);
 }
 $subst_list = array("\$BADGEID\$", "\$FIRSTNAME\$", "\$LASTNAME\$", "\$EMAILADDR\$", "\$PUBNAME\$", "\$BADGENAME\$");
 $email = get_email_from_post();
@@ -34,12 +34,12 @@ $transport = (new Swift_SmtpTransport(SMTP_ADDRESS, 2525));
 //Create the Mailer using your created Transport
 $mailer = new Swift_Mailer($transport);
 
-$query = "SELECT emailtoquery FROM EmailTo where emailtoid=".$email['sendto'];
+$query = "SELECT emailtoquery FROM EmailTo where emailtoid=" . $email['sendto'];
 $result = mysqli_query_exit_on_error($query);
 if (!$result) {
     exit(-1); // Though should have exited already anyway
 }
-$emailto = mysqli_fetch_array($result,MYSQLI_ASSOC);
+$emailto = mysqli_fetch_array($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
 $query = $emailto['emailtoquery'];
 $result = mysqli_query_exit_on_error($query);
@@ -47,7 +47,7 @@ if (!$result) {
     exit(-1); // Though should have exited already anyway
 }
 $i = 0;
-while ($recipientinfo[$i]=mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+while ($recipientinfo[$i] = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
     $i++;
 }
 mysqli_free_result($result);
@@ -60,7 +60,7 @@ if (!$result) {
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $emailfrom = $row['emailfromaddress'];
 mysqli_free_result($result);
-$query="SELECT emailaddress FROM EmailCC where emailccid = {$email['sendcc']};";
+$query = "SELECT emailaddress FROM EmailCC where emailccid = {$email['sendcc']};";
 $result = mysqli_query_exit_on_error($query);
 if (!$result) {
     exit(-1); // Though should have exited already anyway
@@ -72,8 +72,8 @@ $status = checkForShowSchedule($email['body']); // "0" don't show schedule; "1" 
 if ($status === "1" || $status === "2") {
     $scheduleInfoArray = generateSchedules($status, $recipientinfo);
 }
-for ($i=0; $i<$recipient_count; $i++) {
-    $ok=TRUE;
+for ($i = 0; $i < $recipient_count; $i++) {
+    $ok = TRUE;
     //Create the message and set subject
     $message = (new Swift_Message($email['subject']));
 
@@ -97,14 +97,14 @@ for ($i=0; $i<$recipient_count; $i++) {
     //Define from address
     $message->setFrom($emailfrom);
     //Define body
-    $message->setBody($emailverify['body'],'text/plain');
+    $message->setBody($emailverify['body'], 'text/plain');
     //$message =& new Swift_Message($email['subject'],$emailverify['body']);
-    echo ($recipientinfo[$i]['pubsname']." - ".$recipientinfo[$i]['email'].": ");
+    echo ($recipientinfo[$i]['pubsname'] . " - " . $recipientinfo[$i]['email'] . ": ");
     try {
         $message->addTo($recipientinfo[$i]['email']);
     } catch (Swift_SwiftException $e) {
-        echo $e->getMessage()."<br>\n";
-	    $ok=FALSE;
+        echo $e->getMessage() . "<br>\n";
+        $ok = FALSE;
     }
     if ($emailcc != "") {
         $message->addBcc($emailcc);
@@ -121,4 +121,3 @@ for ($i=0; $i<$recipient_count; $i++) {
 }
 //$log =& Swift_LogContainer::getLog();
 //echo $log->dump(true);
-?>

@@ -4,6 +4,4 @@ require_once('PartCommonCode.php');
 session_destroy();                 // Destroy session data
 $_SESSION = array();               // Unset session data
 unset($_COOKIE[session_name()]);   // Clear cookie
-require ('login.php');
-?>
-
+require('login.php');

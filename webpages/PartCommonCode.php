@@ -10,4 +10,3 @@ if ((!may_I("Participant")) && (!may_I("Staff"))) {
     require('login.php');
     exit();
 };
-?>

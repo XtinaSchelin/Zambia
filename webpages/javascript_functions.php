@@ -1,16 +1,18 @@
 <?php
 //	Copyright (c) 2011-2019 Peter Olszowka. All rights reserved. See copyright document for more details.
-function load_external_javascript() {
-    ?>
+function load_external_javascript()
+{
+?>
     <script src="external/jquery1.7.2/jquery-1.7.2.min.js"></script>
     <script src="external/jqueryui1.8.16/jquery-ui-1.8.16.custom.min.js"></script>
     <script src="external/bootstrap2.3.2/bootstrap.js" type="text/javascript"></script>
     <script src="external/choices9.0.0/choices.min.js"></script>
-    <?php
+<?php
 }
 
-function load_internal_javascript($title, $isReport = false) {
-    ?>
+function load_internal_javascript($title, $isReport = false)
+{
+?>
     <script src="javascript/main.js"></script>
     <?php
     /**
@@ -43,15 +45,13 @@ function load_internal_javascript($title, $isReport = false) {
                 echo "<script src=\"javascript/Reports.js\"></script>\n";
             }
     }
-?>
-<script src="javascript/AdminParticipants.js"></script>
-<script src="javascript/editCreateSession.js"></script>
-<script src="javascript/myProfile.js"></script>
-<script src="javascript/SearchMySessions1.js"></script>
-<script src="javascript/staffMaintainSchedule.js"></script>
-<script src="javascript/partPanelInterests.js"></script>
+    ?>
+    <script src="javascript/AdminParticipants.js"></script>
+    <script src="javascript/editCreateSession.js"></script>
+    <script src="javascript/myProfile.js"></script>
+    <script src="javascript/SearchMySessions1.js"></script>
+    <script src="javascript/staffMaintainSchedule.js"></script>
+    <script src="javascript/partPanelInterests.js"></script>
 <?php
 }
 ?>
-
-

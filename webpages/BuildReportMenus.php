@@ -12,15 +12,15 @@ $areYouSure = getInt("areYouSure");
 if ($areYouSure !== 1) {
     staff_header($title);
 ?>
-<p class="alert alert-error">
-    Rebuild all report menus.  Are you sure?
-</p>
-<form class="form-inline" name="confform" method="GET" action="BuildReportMenus.php">
-    <input type="hidden" name="areYouSure" value="1" />
-    <button type="submit" class="btn btn-success">Continue</button>
-    <a class="btn btn-default" href="StaffPage.php">Cancel</a>
-</form>
-    <?php
+    <p class="alert alert-error">
+        Rebuild all report menus. Are you sure?
+    </p>
+    <form class="form-inline" name="confform" method="GET" action="BuildReportMenus.php">
+        <input type="hidden" name="areYouSure" value="1" />
+        <button type="submit" class="btn btn-success">Continue</button>
+        <a class="btn btn-default" href="StaffPage.php">Cancel</a>
+    </form>
+<?php
     staff_footer();
     exit();
 }
@@ -35,13 +35,14 @@ if (!$dirHandle) {
 }
 $allReports = array();
 while (false !== ($reportFileName = readdir($dirHandle))) {
-    if ($reportFileName == "." || $reportFileName == ".." ||
+    if (
+        $reportFileName == "." || $reportFileName == ".." ||
         is_dir("./reports/$reportFileName") ||
         !mb_ereg_match(".*\\.php$", $reportFileName)
     ) {
         continue;
     }
-    include ("./reports/$reportFileName");
+    include("./reports/$reportFileName");
     if (isset($report)) {
         // preserve only data needed for menu generation
         $allReports[$reportFileName] = array('name' => $report['name'], 'description' => $report['description'], 'categories' => $report['categories']);
@@ -80,11 +81,11 @@ foreach ($reportCategories as $reportCategory => $reportCategoryArray) {
     fwrite($staffReportsICIFilHand, ");\n");
 }
 fwrite($staffReportsICIFilHand, "\$reportNames = array();\n");
-foreach($allReports as $reportName => $reportArray) {
+foreach ($allReports as $reportName => $reportArray) {
     fwrite($staffReportsICIFilHand, "\$reportNames['$reportName'] = '{$reportArray['name']}';\n");
 }
 fwrite($staffReportsICIFilHand, "\$reportDescriptions = array();\n");
-foreach($allReports as $reportName => $reportArray) {
+foreach ($allReports as $reportName => $reportArray) {
     $description = addslashes($reportArray['description']);
     fwrite($staffReportsICIFilHand, "\$reportDescriptions['$reportName'] = \"{$description}\";\n");
 }

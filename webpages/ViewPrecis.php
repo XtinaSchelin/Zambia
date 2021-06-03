@@ -7,8 +7,12 @@ $title = "Precis";
 $showlinks = getInt("showlinks", 0);
 $_SESSION['return_to_page'] = "ViewPrecis.php?showlinks=$showlinks";
 $showlinks = ($showlinks === 1);
-$statusidlist = get_idlist_from_db("SessionStatuses", "statusid", "statusname",
-    "'Brainstorm','Edit Me','Vetted'");
+$statusidlist = get_idlist_from_db(
+    "SessionStatuses",
+    "statusid",
+    "statusname",
+    "'Brainstorm','Edit Me','Vetted'"
+);
 $typeidlist = "";
 $trackidlist = "";
 $sessionid = "";
@@ -20,4 +24,3 @@ if ($result = retrieve_select_from_db($trackidlist, $statusidlist, $typeidlist, 
     staff_footer();
     exit();
 }
-?>

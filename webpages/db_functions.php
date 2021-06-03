@@ -1,12 +1,13 @@
 <?php
 // Copyright (c) 2011-2019 Peter Olszowka. All rights reserved. See copyright document for more details.
 
-function mysql_query_XML($query_array) {
-	global $linki, $message_error;
-	$xml = new DomDocument("1.0", "UTF-8");
-	$doc = $xml -> createElement("doc");
-	$doc = $xml -> appendChild($doc);
-	$multiQueryStr = "";
+function mysql_query_XML($query_array)
+{
+    global $linki, $message_error;
+    $xml = new DomDocument("1.0", "UTF-8");
+    $doc = $xml->createElement("doc");
+    $doc = $xml->appendChild($doc);
+    $multiQueryStr = "";
     foreach ($query_array as $query) {
         $query = trim($query);
         $multiQueryStr .= $query;
@@ -30,8 +31,8 @@ function mysql_query_XML($query_array) {
             error_log(mysqli_error($linki));
             return false;
         }
-        $queryNode = $xml -> createElement("query");
-        $queryNode = $doc -> appendChild($queryNode);
+        $queryNode = $xml->createElement("query");
+        $queryNode = $doc->appendChild($queryNode);
         $queryNode->setAttribute("queryName", $queryNameArr[$queryNo]);
         $result = mysqli_store_result($linki);
         if ($result !== false) {
@@ -48,10 +49,11 @@ function mysql_query_XML($query_array) {
         }
         $queryNo++;
     } while (mysqli_more_results($linki));
-	return $xml;
+    return $xml;
 }
 
-function log_mysqli_error($query, $additional_error_message) {
+function log_mysqli_error($query, $additional_error_message)
+{
     global $linki;
     $result = "";
     error_log("mysql query error in {$_SERVER["SCRIPT_FILENAME"]}");
@@ -71,11 +73,13 @@ function log_mysqli_error($query, $additional_error_message) {
     return $result;
 }
 
-function mysqli_query_exit_on_error($query) {
+function mysqli_query_exit_on_error($query)
+{
     return mysqli_query_with_error_handling($query, true);
 }
 
-function mysqli_query_with_error_handling($query, $exit_on_error = false, $ajax = false) {
+function mysqli_query_with_error_handling($query, $exit_on_error = false, $ajax = false)
+{
     global $linki, $message_error;
     $result = mysqli_query($linki, $query);
     if (!$result) {
@@ -87,7 +91,8 @@ function mysqli_query_with_error_handling($query, $exit_on_error = false, $ajax 
     return $result;
 }
 
-function rollback_mysqli($exit_on_error = false, $ajax = false) {
+function rollback_mysqli($exit_on_error = false, $ajax = false)
+{
     global $linki;
     if (mysqli_rollback($linki)) {
         return true;
@@ -99,7 +104,8 @@ function rollback_mysqli($exit_on_error = false, $ajax = false) {
     return false;
 }
 
-function populateCustomTextArray() {
+function populateCustomTextArray()
+{
     global $customTextArray, $title;
     $customTextArray = array();
     $query = "SELECT tag, textcontents FROM CustomText WHERE page = \"$title\";";
@@ -115,13 +121,13 @@ function populateCustomTextArray() {
 // Function prepare_db_and_more()
 // Opens database channel
 // scripts which rely on this file (db_functions.php) may run from a different directory
-if (file_exists("../db_name.php"))
-{
+if (file_exists("../db_name.php")) {
     include('../db_name.php');
 } else {
     include("./db_name.php");
 }
-function prepare_db_and_more() {
+function prepare_db_and_more()
+{
     global $con_start_php_timestamp, $linki;
     $linki = mysqli_connect(DBHOSTNAME, DBUSERID, DBPASSWORD, DBDB);
     if ($linki === false)
@@ -140,11 +146,12 @@ function prepare_db_and_more() {
 
 // The table SessionEditHistory has a timestamp column which is automatically set to the
 // current timestamp by MySQL. 
-function record_session_history($sessionid, $badgeid, $name, $email, $editcode, $statusid) {
-	global $linki;
-	$name = mysqli_real_escape_string($linki, $name);
-	$email = mysqli_real_escape_string($linki, $email);
-	$query = <<<EOD
+function record_session_history($sessionid, $badgeid, $name, $email, $editcode, $statusid)
+{
+    global $linki;
+    $name = mysqli_real_escape_string($linki, $name);
+    $email = mysqli_real_escape_string($linki, $email);
+    $query = <<<EOD
 INSERT INTO SessionEditHistory
     SET
         sessionid = $sessionid,
@@ -154,13 +161,14 @@ INSERT INTO SessionEditHistory
         sessioneditcode = $editcode,
         statusid = $statusid;
 EOD;
-	return mysqli_query_with_error_handling($query);
+    return mysqli_query_with_error_handling($query);
 }
 
 // Function get_name_and_email(&$name, &$email)
 // Gets name and email from db if they are available and not already set
 // returns FALSE if error condition encountered.  Error message in global $message_error
-function get_name_and_email(&$name, &$email) {
+function get_name_and_email(&$name, &$email)
+{
     global $badgeid;
     if (!empty($name)) {
         return true;
@@ -173,16 +181,16 @@ function get_name_and_email(&$name, &$email) {
     }
     if (may_I('Staff') || may_I('Participant')) { //name and email should be found in db if either set
         $query = "SELECT pubsname FROM Participants WHERE badgeid = '$badgeid';";
-		if (!$result = mysqli_query_with_error_handling($query)) {
+        if (!$result = mysqli_query_with_error_handling($query)) {
             return false;
         }
         $name = mysqli_fetch_row($result)[0];
-		mysqli_free_result($result);
+        mysqli_free_result($result);
         if ($name === '') {
             $name = ' '; //if name is null or '' in db, set to ' ' so it won't appear unpopulated in query above
         }
         $query = "SELECT badgename, email FROM CongoDump WHERE badgeid = \"$badgeid\";";
-		if (!$result = mysqli_query_with_error_handling($query)) {
+        if (!$result = mysqli_query_with_error_handling($query)) {
             return false;
         }
         $row = mysqli_fetch_row($result);
@@ -199,7 +207,8 @@ function get_name_and_email(&$name, &$email) {
 // Reads parameters (see below) and a specified table from the db.
 // Outputs HTML of the "<OPTION>" values for a Select control.
 //
-function populate_select_from_table($table_name, $default_value, $option_0_text, $default_flag) {
+function populate_select_from_table($table_name, $default_value, $option_0_text, $default_flag)
+{
     // set $default_value=-1 for no default value (note not really supported by HTML)
     // set $default_value=0 for initial value to be set as $option_0_text
     // otherwise the initial value will be equal to the row whose id == $default_value
@@ -230,7 +239,8 @@ function populate_select_from_table($table_name, $default_value, $option_0_text,
 // Reads parameters (see below) and a specified query for the db.
 // Outputs HTML of the "<OPTION>" values for a Select control.
 //
-function populate_select_from_query($query, $default_value, $option_0_text, $default_flag) {
+function populate_select_from_query($query, $default_value, $option_0_text, $default_flag)
+{
     // set $default_value=-1 for no default value (note not really supported by HTML)
     // set $default_value=0 for initial value to be set as $option_0_text
     // otherwise the initial value will be equal to the row whose id == $default_value
@@ -257,7 +267,8 @@ function populate_select_from_query($query, $default_value, $option_0_text, $def
 // Outputs HTML of the "<OPTION>" values for a Select control with
 // multiple enabled.
 //
-function populate_multiselect_from_table($table_name, $skipset) {
+function populate_multiselect_from_table($table_name, $skipset)
+{
     // assumes id's in the table start at 1 '
     // skipset is array of integers of values of id from table to preselect
     // error_log("Zambia->populate_multiselect_from_table->\$skipset: ".print_r($skipset,TRUE)."\n"); // only for debugging
@@ -281,7 +292,8 @@ function populate_multiselect_from_table($table_name, $skipset) {
 // Outputs HTML of the "<OPTION>" values for a Select control associated
 // with the *source* of an active update box.
 //
-function populate_multisource_from_table($table_name, $skipset) {
+function populate_multisource_from_table($table_name, $skipset)
+{
     // assumes id's in the table start at 1 '
     // skipset is array of integers of values of id from table not to include
     if ($skipset == "") {
@@ -302,7 +314,8 @@ function populate_multisource_from_table($table_name, $skipset) {
 // Outputs HTML of the "<OPTION>" values for a Select control associated
 // with the *destination* of an active update box.
 //
-function populate_multidest_from_table($table_name, $skipset) {
+function populate_multidest_from_table($table_name, $skipset)
+{
     // assumes id's in the table start at 1                        '
     // skipset is array of integers of values of id from table to include
     // in "dest" because they were skipped from "source"
@@ -323,11 +336,12 @@ function populate_multidest_from_table($table_name, $skipset) {
 // Takes data from global $session array and updates
 // the tables Sessions, SessionHasFeature, SessionHasService and SessionHasPubChar.
 //
-function update_session() {
+function update_session()
+{
     $sessionf = filter_session(); // reads global $session array and returns sanitized copy
     $id = $sessionf["id"];
 
-    $query=<<<EOD
+    $query = <<<EOD
 UPDATE Sessions SET
         trackid="{$sessionf["track"]}",
         typeid="{$sessionf["type"]}",
@@ -405,7 +419,8 @@ EOD;
 // Reads Session table from db to determine next unused value
 // of sessionid.
 //
-function get_next_session_id() {
+function get_next_session_id()
+{
     global $linki;
     $result = mysqli_query_with_error_handling("SELECT MAX(sessionid) FROM Sessions;");
     if (!$result) {
@@ -423,12 +438,13 @@ function get_next_session_id() {
 // Takes data from global $session array and creates new rows in
 // the tables Sessions, SessionHasFeature, and SessionHasService.
 //
-function insert_session() {
+function insert_session()
+{
     global $linki;
     $sessionf = filter_session(); // reads global $session array and returns sanitized copy
     $id = $sessionf["id"];
 
-    $query=<<<EOD
+    $query = <<<EOD
 INSERT INTO Sessions SET
         trackid="{$sessionf["track"]}",
         typeid="{$sessionf["type"]}",
@@ -492,7 +508,8 @@ EOD;
 // Function filter_session()
 // Takes data from global $session array returns array with filtered data
 //
-function filter_session() {
+function filter_session()
+{
     global $linki, $session;
     $session2 = array();
     $session2["track"] = filter_var($session["track"], FILTER_SANITIZE_NUMBER_INT);
@@ -550,7 +567,8 @@ function filter_session() {
 // from db and returns array $session or FALSE.
 // If necessary, populates global $message_error
 //
-function retrieve_session_from_db($sessionid) {
+function retrieve_session_from_db($sessionid)
+{
     global $message_error;
     $session = array();
     $query = <<<EOD
@@ -646,7 +664,8 @@ EOD;
    log user in. */
 /* check login script, included in db_connect.php. */
 
-function isLoggedIn() {
+function isLoggedIn()
+{
     global $message_error, $message2;
     $message2 = "";
     $message_error = "";
@@ -688,7 +707,7 @@ function isLoggedIn() {
     //compare:
 
     if ($_SESSION['password'] != $db_pass) {
-    // kill incorrect session variables.
+        // kill incorrect session variables.
         unset($_SESSION['badgeid']);
         unset($_SESSION['password']);
         $message2 = "Incorrect userid or password.";
@@ -703,7 +722,8 @@ function isLoggedIn() {
 // Reads Participants tables
 // from db and returns array $participant.
 //
-function retrieveParticipant($badgeid) {
+function retrieveParticipant($badgeid)
+{
     global $message_error;
     if (empty($message_error)) {
         $message_error = "";
@@ -732,7 +752,8 @@ EOD;
 // Function retrieveFullParticipant()
 // Reads CongoDump table from db and calls retrieveParticipant()
 // to return combined results
-function retrieveFullParticipant($badgeid) {
+function retrieveFullParticipant($badgeid)
+{
     global $message_error;
     if (empty($message_error)) {
         $message_error = "";
@@ -779,7 +800,8 @@ EOD;
 // from db to populate global array $partAvail.
 // Returns $participantAvailability array or false if error
 //
-function retrieve_participantAvailability_from_db($badgeid, $exit_on_error = false) {
+function retrieve_participantAvailability_from_db($badgeid, $exit_on_error = false)
+{
     global $message_error;
     $query = <<<EOD
 SELECT
@@ -808,8 +830,10 @@ EOD;
     if ($rows == 1) {
         $participantAvailability = mysqli_fetch_array($result, MYSQLI_ASSOC);
     } else {
-        $participantAvailability = array('badgeid' => $badgeid, 'maxprog' => '', 'preventconflict' => '',
-            'otherconstraints' => '', 'numkidsfasttrack'=>'');
+        $participantAvailability = array(
+            'badgeid' => $badgeid, 'maxprog' => '', 'preventconflict' => '',
+            'otherconstraints' => '', 'numkidsfasttrack' => ''
+        );
     }
     mysqli_free_result($result);
 
@@ -855,8 +879,9 @@ EOD;
 // Performs complicated join to get the set of permission atoms available to the user
 // Stores them in global variable $permission_set
 //
-function set_permission_set($badgeid) {
-// First do simple permissions
+function set_permission_set($badgeid)
+{
+    // First do simple permissions
     $_SESSION['permission_set'] = array();
     $query = <<<EOD
 SELECT DISTINCT
@@ -883,47 +908,48 @@ EOD;
         $_SESSION['permission_set'][] = $onerow[0];
     };
     mysqli_free_result($result);
-// Second, do <<specific>> permissions
-//    $_SESSION['permission_set_specific'] = array();
-//    $query = <<<EOD
-//SELECT DISTINCT
-//        permatomtag, elementid
-//    FROM
-//        PermissionAtoms PA
-//        JOIN Permissions P USING(permatomid),
-//        Phases PH,
-//        PermissionRoles PR,
-//        UserHasPermissionRole UHPR
-//    WHERE
-//            (   (UHPR.badgeid='$badgeid' AND UHPR.permroleid = P.permroleid)
-//              OR P.badgeid='$badgeid' )
-//        AND
-//            (P.phaseid IS NULL
-//            OR (P.phaseid = PH.phaseid AND PH.current = TRUE))
-//        AND
-//            PA.elementid IS NOT NULL;
-//EOD;
-//    if (!$result = mysqli_query_with_error_handling($query, true)) {
-//        return false;
-//    }
-//    $rows = mysqli_num_rows($result);
-//    if ($rows == 0) {
-//        mysqli_free_result($result);
-//        return true;
-//    };
-//    for ($i = 0; $i < $rows; $i++) {
-//        $_SESSION['permission_set_specific'][] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-//    };
-//    mysqli_free_result($result);
+    // Second, do <<specific>> permissions
+    //    $_SESSION['permission_set_specific'] = array();
+    //    $query = <<<EOD
+    //SELECT DISTINCT
+    //        permatomtag, elementid
+    //    FROM
+    //        PermissionAtoms PA
+    //        JOIN Permissions P USING(permatomid),
+    //        Phases PH,
+    //        PermissionRoles PR,
+    //        UserHasPermissionRole UHPR
+    //    WHERE
+    //            (   (UHPR.badgeid='$badgeid' AND UHPR.permroleid = P.permroleid)
+    //              OR P.badgeid='$badgeid' )
+    //        AND
+    //            (P.phaseid IS NULL
+    //            OR (P.phaseid = PH.phaseid AND PH.current = TRUE))
+    //        AND
+    //            PA.elementid IS NOT NULL;
+    //EOD;
+    //    if (!$result = mysqli_query_with_error_handling($query, true)) {
+    //        return false;
+    //    }
+    //    $rows = mysqli_num_rows($result);
+    //    if ($rows == 0) {
+    //        mysqli_free_result($result);
+    //        return true;
+    //    };
+    //    for ($i = 0; $i < $rows; $i++) {
+    //        $_SESSION['permission_set_specific'][] = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    //    };
+    //    mysqli_free_result($result);
     return true;
 }
 
 //function get_idlist_from_db($table_name, $id_col_name, $desc_col_name, $desc_col_match);
 // Returns a string with a list of id's from a configuration table
 
-function get_idlist_from_db($table_name, $id_col_name, $desc_col_name, $desc_col_match) {
+function get_idlist_from_db($table_name, $id_col_name, $desc_col_name, $desc_col_match)
+{
     $query = "SELECT GROUP_CONCAT($id_col_name) from $table_name where ";
-    $query.= "$desc_col_name in ($desc_col_match)";
+    $query .= "$desc_col_name in ($desc_col_match)";
     $result = mysqli_query_with_error_handling($query);
     $retval = mysqli_fetch_row($result)[0];
     mysqli_free_result($result);
@@ -933,7 +959,8 @@ function get_idlist_from_db($table_name, $id_col_name, $desc_col_name, $desc_col
 // Function get_sstatus()
 // Populates the global sstatus array from the database
 
-function get_sstatus() {
+function get_sstatus()
+{
     $sstatus = array();
     $query = "SELECT statusid, may_be_scheduled, validate FROM SessionStatuses;";
     $result = mysqli_query_exit_on_error($query);
@@ -945,4 +972,3 @@ function get_sstatus() {
     }
     return $sstatus;
 }
-?>

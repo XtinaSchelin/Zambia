@@ -9,4 +9,3 @@ ProcessImportSessions();
 SetSessionSearchParameterDefaults();
 RenderSearchPreviousSessions();
 staff_footer();
-?>

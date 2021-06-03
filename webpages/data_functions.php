@@ -1,14 +1,16 @@
 <?php
 //	Copyright (c) 2011-2019 The Zambia Group. All rights reserved. See copyright document for more details.
-function convertStartTimeToUnits($startTimeHour, $startTimeMin) {
-	$startTimeUnits = $startTimeHour * 2;
-	if ($startTimeMin >= 30) {
+function convertStartTimeToUnits($startTimeHour, $startTimeMin)
+{
+    $startTimeUnits = $startTimeHour * 2;
+    if ($startTimeMin >= 30) {
         $startTimeUnits++;
     }
-	return $startTimeUnits;
+    return $startTimeUnits;
 }
 
-function convertEndTimeToUnits($endTimeHour, $endTimeMin) {
+function convertEndTimeToUnits($endTimeHour, $endTimeMin)
+{
     $endTimeUnits = $endTimeHour * 2;
     if ($endTimeMin > 30) {
         $endTimeUnits += 2;
@@ -18,24 +20,28 @@ function convertEndTimeToUnits($endTimeHour, $endTimeMin) {
     return $endTimeUnits;
 }
 
-function convertUnitsToTimeStr($timeUnits) {
-	return floor($timeUnits/2).":00:00";
+function convertUnitsToTimeStr($timeUnits)
+{
+    return floor($timeUnits / 2) . ":00:00";
 }
 
-function convertUnitsToHourMin($timeUnits) {
-	$hour = floor($timeUnits/2);
-	$min = ($timeUnits%2) * 30;
-	return array($hour, $min);
+function convertUnitsToHourMin($timeUnits)
+{
+    $hour = floor($timeUnits / 2);
+    $min = ($timeUnits % 2) * 30;
+    return array($hour, $min);
 }
 
-function showCustomText($pre, $tag, $post) {
+function showCustomText($pre, $tag, $post)
+{
     global $customTextArray;
     if (!empty($customTextArray[$tag])) {
         echo $pre . $customTextArray[$tag] . $post;
     }
 }
 
-function fetchCustomText($tag) {
+function fetchCustomText($tag)
+{
     global $customTextArray;
     if (!empty($customTextArray[$tag])) {
         return $customTextArray[$tag];
@@ -44,7 +50,8 @@ function fetchCustomText($tag) {
     }
 }
 
-function appendCustomTextArrayToXML($xmlDoc) {
+function appendCustomTextArrayToXML($xmlDoc)
+{
     global $customTextArray;
     $customTextNode = $xmlDoc->createElement("customText");
     $docNode = $xmlDoc->getElementsByTagName("doc")->item(0);
@@ -58,7 +65,8 @@ function appendCustomTextArrayToXML($xmlDoc) {
 // Function conv_min2hrsmin()
 // Input is unchecked form input in minutes
 // Output is string in MySql time format
-function conv_min2hrsmin($mininput) {
+function conv_min2hrsmin($mininput)
+{
     $min = filter_var($mininput, FILTER_SANITIZE_NUMBER_INT);
     if (($min < 1) or ($min > 3000)) {
         return "00:00:00";
@@ -72,7 +80,8 @@ function conv_min2hrsmin($mininput) {
 // gets a parameter from $_GET[] or $_POST[] of name
 // and confirms it is an integer.
 // Safe from referencing nonexisting array index
-function getInt($name, $default = false) {
+function getInt($name, $default = false)
+{
     if (isset($_GET[$name])) {
         $int = $_GET[$name];
     } elseif (isset($_POST[$name])) {
@@ -84,7 +93,7 @@ function getInt($name, $default = false) {
     if (empty($t)) {
         return $default;
     } else {
-        return(intval($t));
+        return (intval($t));
     }
 }
 
@@ -92,7 +101,8 @@ function getInt($name, $default = false) {
 // gets a parameter from $_GET[] or $_POST[] of name
 // and strips slashes
 // Safe from referencing nonexisting array index
-function getString($name) {
+function getString($name)
+{
     if (isset($_GET[$name])) {
         $string = $_GET[$name];
     } elseif (isset($_POST[$name])) {
@@ -107,7 +117,8 @@ function getString($name) {
 // gets a parameter from $_GET[] or $_POST[] of name
 // in form of array and strips slashes from each element
 // Safe from referencing nonexisting array index
-function getArrayOfStrings($name) {
+function getArrayOfStrings($name)
+{
     if (isset($_GET[$name])) {
         $array = $_GET[$name];
     } elseif (isset($_POST[$name])) {
@@ -115,7 +126,9 @@ function getArrayOfStrings($name) {
     } else {
         return array();
     }
-    return array_map(function($str) { return stripslashes($str); }, $array);
+    return array_map(function ($str) {
+        return stripslashes($str);
+    }, $array);
 }
 
 // Function get_nameemail_from_post($name, $email)
@@ -123,7 +136,8 @@ function getArrayOfStrings($name) {
 // the variables from the arguments.  Also stores them in
 // SESSION variables.
 //
-function get_nameemail_from_post(&$name, &$email) {
+function get_nameemail_from_post(&$name, &$email)
+{
     $name = stripslashes($_POST['name']);
     $email = stripslashes($_POST['email']);
     $_SESSION['name'] = $name;
@@ -139,7 +153,8 @@ function get_nameemail_from_post(&$name, &$email) {
 // Notes on variables:
 // $_POST["availstarttime_$i"], $_POST["availendtime_$i"] are indexes into Times table, 0 for unset; 
 //
-function get_participant_availability_from_post() {
+function get_participant_availability_from_post()
+{
     $partAvail = array();
     // for numeric fields in ParticipantAvailability--convert to 0 if blank
     $partAvail["maxprog"] = getInt("maxprog", "NULL");
@@ -162,7 +177,8 @@ function get_participant_availability_from_post() {
 // Reads the data posted by the browser form and populates
 // the $session global variable with it.
 //
-function get_session_from_post() {
+function get_session_from_post()
+{
     global $session;
     $session["sessionid"] = $_POST["sessionid"];
     $session["track"] = $_POST["track"];
@@ -201,7 +217,8 @@ function get_session_from_post() {
 // an index into a table of options, the default value of "0" signifies
 // that "Select" will be displayed in the gui.
 //
-function set_session_defaults() {
+function set_session_defaults()
+{
     global $session;
     //$session["sessionid"] set elsewhere
     $session["track"] = 0; // prompt with "SELECT"
@@ -229,14 +246,15 @@ function set_session_defaults() {
     $session["notesforprog"] = "";
     $session["invguest"] = false; // leave checkbox blank initially
 }
-	
+
 // Function set_brainstorm_session_defaults	
 // Populates the $session global variable with default data
 // for use when creating a new session in brainstorm.  Note that if a field is
 // an index into a table of options, the default value of "0" signifies
 // that "Select" will be displayed in the gui.
 //
-function set_brainstorm_session_defaults() {
+function set_brainstorm_session_defaults()
+{
     global $session;
     $session["roomset"] = 99; // "Unspecified"
     if (!may_I('Staff')) {
@@ -247,7 +265,8 @@ function set_brainstorm_session_defaults() {
 // Function parse_mysql_time($time)
 // Takes the string $time in "hhh:mm:ss" and return array of "day" and "hour" and "minute"
 //
-function parse_mysql_time($time) {
+function parse_mysql_time($time)
+{
     $result = array();
     $h = 0 + substr($time, 0, strlen($time) - 6);
     $result['hour'] = fmod($h, 24);
@@ -260,7 +279,8 @@ function parse_mysql_time($time) {
 // Function parse_mysql_time_hours($time)
 // Takes the string $time in "hhh:mm:ss" and return array of "hours", "minutes", and "seconds"
 //
-function parse_mysql_time_hours($time) {
+function parse_mysql_time_hours($time)
+{
     $result = array();
     $hours = "";
     $minutes = "";
@@ -278,7 +298,8 @@ function parse_mysql_time_hours($time) {
 // $time is mysql output measured from start of con
 // result is like "Fri 1:00 PM"
 //
-function time_description($time) {
+function time_description($time)
+{
     global $con_start_php_timestamp;
     $atime = parse_mysql_time($time);
     try {
@@ -286,7 +307,7 @@ function time_description($time) {
     } catch (Exception $e) {
         return false;
     }
-    $netdatetime = date_add (clone $con_start_php_timestamp , $interval );
+    $netdatetime = date_add(clone $con_start_php_timestamp, $interval);
     if ($netdatetime === false) {
         return false;
     }
@@ -297,7 +318,8 @@ function time_description($time) {
 // Function timeDescFromUnits($timeUnits)
 // Takes the int $timeUnits which is the number of time units (1/2 hours)
 // from the start of the con and converts to string like "Fri 1:00 PM"
-function timeDescFromUnits($timeUnits) {
+function timeDescFromUnits($timeUnits)
+{
     global $con_start_php_timestamp;
     $days = intval($timeUnits / 48);
     $hours = intval(($timeUnits % 48) / 2);
@@ -307,7 +329,7 @@ function timeDescFromUnits($timeUnits) {
     } catch (Exception $e) {
         return false;
     }
-    $netdatetime = date_add (clone $con_start_php_timestamp , $interval );
+    $netdatetime = date_add(clone $con_start_php_timestamp, $interval);
     if ($netdatetime === false) {
         return false;
     }
@@ -319,7 +341,8 @@ function timeDescFromUnits($timeUnits) {
 // Take the int $daynum which represents day of the con (starting at 1)
 // and returns the string with the full day of the week, e.g. "Friday", "Saturday"
 // for that day taking into account the configured start of the con CON_START_DATIM
-function longDayNameFromInt($daynum) {
+function longDayNameFromInt($daynum)
+{
     global $con_start_php_timestamp;
     if ($daynum == 1) {
         return date_format($con_start_php_timestamp, "l");
@@ -329,7 +352,7 @@ function longDayNameFromInt($daynum) {
     } catch (Exception $e) {
         return false;
     }
-    $netdatetime = date_add (clone $con_start_php_timestamp , $interval );
+    $netdatetime = date_add(clone $con_start_php_timestamp, $interval);
     if ($netdatetime === false) {
         return false;
     }
@@ -340,7 +363,8 @@ function longDayNameFromInt($daynum) {
 // Function fix_slashes($arg)
 // Takes the string $arg and removes multiple slashes, 
 // slash-quote and slash-double quote.
-function fix_slashes($arg) {
+function fix_slashes($arg)
+{
     while (($pos = strpos($arg, "\\\\")) !== false) {
         if ($pos == 0) {
             $arg = substr($arg, 1);
@@ -369,11 +393,10 @@ function fix_slashes($arg) {
 // $permatomtag is a string which designates a permission atom
 // returns TRUE if user has this permission in the current phase(s)
 //
-function may_I($permatomtag) {
+function may_I($permatomtag)
+{
     if ($_SESSION['permission_set'] == "") {
         return (false);
     }
     return (in_array($permatomtag, $_SESSION['permission_set']));
 }
-
-?>

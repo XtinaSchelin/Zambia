@@ -1,6 +1,7 @@
 <?php
 //	Copyright (c) 2011-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function check_room_sched_conflicts($deleteScheduleIds, $addToScheduleArray) {
+function check_room_sched_conflicts($deleteScheduleIds, $addToScheduleArray)
+{
     //
     // $addToScheduleArray is an array of $sessionid => $startmin
     //     sessions to add to schedule with starttime measured in minutes from start of con
@@ -35,12 +36,11 @@ function check_room_sched_conflicts($deleteScheduleIds, $addToScheduleArray) {
     $addToScheduleParticipants = array();
     $addToScheduleParticipantsAttending = array();
     $query = <<<EOD
-SELECT
-		S.sessionid, hour(S.duration)*60+minute(S.duration) as durationmin, S.title
-	FROM
-		Sessions S
-	WHERE
-		S.sessionid in ($sessionidlist)
+SELECT S.sessionid,
+       hour(S.duration)*60+minute(S.duration) AS durationmin,
+       S.title
+FROM Sessions S
+WHERE S.sessionid in ($sessionidlist);
 EOD;
     if (!$result = mysqli_query_with_error_handling($query, true, true)) {
         exit(); // should have exited already
@@ -52,13 +52,11 @@ EOD;
     }
     mysqli_free_result($result);
     $query = <<<EOD
-SELECT
-		S.sessionid, POS.badgeid
-	FROM
-			 Sessions S
-		JOIN ParticipantOnSession POS USING (sessionid)
-	WHERE
-		S.sessionid in ($sessionidlist)
+SELECT S.sessionid,
+       POS.badgeid
+FROM Sessions S
+JOIN ParticipantOnSession POS USING (sessionid)
+WHERE S.sessionid in ($sessionidlist);
 EOD;
     if (!$result = mysqli_query_with_error_handling($query, true, true)) {
         exit(); // should have exited already
@@ -71,15 +69,19 @@ EOD;
         return (true); // if none of the sessions added to the schedule
         // had any participants, then there can be no participant conflicts.
     }
-    $addToScheduleParticipantsForQuery = array_map(function($str){global $linki;return "'" . mysqli_real_escape_string($linki, $str) . "'";}, array_keys($addToScheduleParticipants));
+    $addToScheduleParticipantsForQuery = array_map(function ($str) {
+        global $linki;
+        return "'" . mysqli_real_escape_string($linki, $str) . "'";
+    }, array_keys($addToScheduleParticipants));
     $badgeidlist = implode(",", $addToScheduleParticipantsForQuery);
     $query = <<<EOD
-SELECT
-		badgeid, pubsname, if (interested = 1, 1, 0) as attending
-	FROM
-		Participants
-	WHERE
-		badgeid in ($badgeidlist)
+SELECT badgeid,
+       pubsname,
+       IF (interested = 1,
+           1,
+           0) AS attending
+FROM Participants
+WHERE badgeid in ($badgeidlist);
 EOD;
     if (!$result = mysqli_query_with_error_handling($query, true, true)) {
         exit(); // should have exited already
@@ -92,16 +94,13 @@ EOD;
     // starttime and duration in minutes from start of con -- simpler time comparison
     // Get participant availabilities
     $query = <<<EOD
-SELECT
-		badgeid,
-		HOUR(starttime) * 60 + MINUTE(starttime) AS startmin,
-		HOUR(endtime) * 60 + MINUTE(endtime) AS endmin
-	FROM
-		ParticipantAvailabilityTimes
-	WHERE
-		badgeid IN ($badgeidlist)
-	ORDER BY
-		badgeid, startmin;
+SELECT badgeid,
+       HOUR(starttime) * 60 + MINUTE(starttime) AS startmin,
+       HOUR(endtime) * 60 + MINUTE(endtime) AS endmin
+FROM ParticipantAvailabilityTimes
+WHERE badgeid IN ($badgeidlist)
+ORDER BY badgeid,
+         startmin;
 EOD;
     if (!$result = mysqli_query_with_error_handling($query, true, true)) {
         exit(); // should have exited already
@@ -126,21 +125,18 @@ EOD;
     }
     mysqli_free_result($result);
     $query = <<<EOD
-SELECT
-		SCH.scheduleid,
-		SCH.sessionid,
-		HOUR(SCH.starttime) * 60 + MINUTE(SCH.starttime) AS startmin,
-		HOUR(SCH.starttime) * 60 + MINUTE(SCH.starttime) + HOUR(S.duration) * 60 + MINUTE(S.duration) as endmin,
-		POS.badgeid,
-		S.title,
-		R.roomname
-	FROM
-			 Schedule SCH
-		JOIN Sessions S USING (sessionid)
-		JOIN Rooms R USING (roomid)
-		JOIN ParticipantOnSession POS USING (sessionid)
-	WHERE
-		POS.badgeid in ($badgeidlist)
+SELECT SCH.scheduleid,
+       SCH.sessionid,
+       HOUR(SCH.starttime) * 60 + MINUTE(SCH.starttime) AS startmin,
+       HOUR(SCH.starttime) * 60 + MINUTE(SCH.starttime) + HOUR(S.duration) * 60 + MINUTE(S.duration) AS endmin,
+       POS.badgeid,
+       S.title,
+       R.roomname
+FROM Schedule SCH
+JOIN Sessions S USING (sessionid)
+JOIN Rooms R USING (roomid)
+JOIN ParticipantOnSession POS USING (sessionid)
+WHERE POS.badgeid in ($badgeidlist);
 EOD;
     if (!$result = mysqli_query_with_error_handling($query, true, true)) {
         exit(); // should have exited already
@@ -162,8 +158,10 @@ EOD;
         $conflictThisAddition = false;
         // check #1 two place at once conflict
         foreach ($refScheduleArray as $refSession) {
-            if ($addSession['startmin'] >= $refSession['endmin'] or
-                $refSession['startmin'] >= $addSession['endmin'])
+            if (
+                $addSession['startmin'] >= $refSession['endmin'] or
+                $refSession['startmin'] >= $addSession['endmin']
+            )
                 continue;
             $participants = $addSession['participants'];
             if ($participants) {
@@ -240,10 +238,10 @@ EOD;
 
 function SubmitMaintainRoom($ignore_conflicts)
 {
-//
-//  This is hardcoded to follow the workflow of editme -> vetted -> scheduled -> assigned
-//  We need to find a way to make it more configurable and flexible
-//
+    //
+    //  This is hardcoded to follow the workflow of editme -> vetted -> scheduled -> assigned
+    //  We need to find a way to make it more configurable and flexible
+    //
     global $linki, $message;
     $numrows = $_POST["numrows"];
     $selroomid = getInt("selroom");
@@ -287,7 +285,7 @@ function SubmitMaintainRoom($ignore_conflicts)
     }
     if (count($deleteScheduleIds) > 0) {
         $delSchedIdList = implode(",", $deleteScheduleIds);
-//  Set status of deleted entries back to vetted.
+        //  Set status of deleted entries back to vetted.
         $vs = get_idlist_from_db('SessionStatuses', 'statusid', 'statusname', "'vetted'");
         $query = "UPDATE Sessions AS S, Schedule as SC SET S.statusid=$vs WHERE S.sessionid=SC.sessionid AND ";
         $query .= "SC.scheduleid IN ($delSchedIdList)";
@@ -307,9 +305,8 @@ function SubmitMaintainRoom($ignore_conflicts)
         $rows = mysqli_affected_rows($linki);
         echo "<p class=\"alert\">$rows session" . ($rows > 1 ? "s" : "") . " removed from schedule.\n</p>";
         $query = <<<EOD
-INSERT INTO SessionEditHistory
-        (sessionid, badgeid, name, email_address, timestamp, sessioneditcode, statusid, editdescription)
-        VALUES
+INSERT INTO SessionEditHistory (sessionid, badgeid, name, email_address, TIMESTAMP, sessioneditcode, statusid, editdescription)
+VALUES
 EOD;
         foreach ($deleteSessionIds as $delsessionid) {
             $query .= "($delsessionid,\"$badgeid\",\"$name\",\"$email\",null,5,$vs,null),";
@@ -335,7 +332,7 @@ EOD;
             staff_footer();
             exit();
         }
-// Set status of scheduled entries to Scheduled.
+        // Set status of scheduled entries to Scheduled.
         $vs = get_idlist_from_db('SessionStatuses', 'statusid', 'statusname', "'scheduled'");
         $query = "UPDATE Sessions SET statusid=$vs WHERE sessionid=$sessionid";
         if (!mysqli_query($linki, $query)) {
@@ -344,11 +341,10 @@ EOD;
             staff_footer();
             exit();
         }
-// Record history of new entries to schedule 
+        // Record history of new entries to schedule 
         $query = <<<EOD
-INSERT INTO SessionEditHistory
-        (sessionid, badgeid, name, email_address, timestamp, sessioneditcode, statusid, editdescription)
-        VALUES
+INSERT INTO SessionEditHistory (sessionid, badgeid, name, email_address, timestamp, sessioneditcode, statusid, editdescription)
+VALUES
 EOD;
         $query .= "($sessionid,\"$badgeid\",\"$name\",\"$email\",null,4,$vs,\"" . time_description($time) . " in $selroomid\")";
         if (!mysqli_query($linki, $query)) {
@@ -366,5 +362,3 @@ EOD;
     }
     return (true);
 }
-
-?>

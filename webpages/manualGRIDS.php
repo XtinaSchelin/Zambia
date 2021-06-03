@@ -1,13 +1,13 @@
 <?php
 // Copyright (c) 2011-2017 Peter Olszowka. All rights reserved. See copyright document for more details.
-    global $title;
-    $title = "GRIDS Reports";
-    require_once('db_functions.php');
-    require_once('StaffHeader.php');
-    require_once('StaffFooter.php');
-    require_once('StaffCommonCode.php');
-    staff_header($title);
-    $_SESSION['return_to_page'] = "REPORT_LINK";
+global $title;
+$title = "GRIDS Reports";
+require_once('db_functions.php');
+require_once('StaffHeader.php');
+require_once('StaffFooter.php');
+require_once('StaffCommonCode.php');
+staff_header($title);
+$_SESSION['return_to_page'] = "REPORT_LINK";
 ?>
 <dl>
     <dt><a href="eventgridstaticreport.php">Published Event Grid</a></dt>

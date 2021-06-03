@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2005-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function renderMyInterests($title, $error, $message, $rolearray) {
+function renderMyInterests($title, $error, $message, $rolearray)
+{
     global $link, $yespanels, $nopanels, $yespeople, $nopeople;
     global $otherroles, $newrow;
     $rolerows = $rolearray['count'];
@@ -104,4 +105,4 @@ function renderMyInterests($title, $error, $message, $rolearray) {
     echo "    </div>\n";
     echo "<br /><br />\n";
     echo "</form>\n";
-} ?>
+}

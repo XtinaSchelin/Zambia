@@ -1,6 +1,7 @@
 <?php
 //	Copyright (c) 2010-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function SetSessionSearchParameterDefaults() {
+function SetSessionSearchParameterDefaults()
+{
     global $SessionSearchParameters;
     $SessionSearchParameters['currenttrack'] = 0;
     $SessionSearchParameters['previouscontrack'] = 0;
@@ -11,14 +12,15 @@ function SetSessionSearchParameterDefaults() {
     $SessionSearchParameters['showimported'] = false;
 }
 
-function RenderSearchPreviousSessions() {
+function RenderSearchPreviousSessions()
+{
     global $SessionSearchParameters, $message_error, $message;
     if ($message_error) {
         echo "<p class=\"alert alert-error\">$message_error</p>\n";
     } elseif ($message != "") {
         echo "<p class=\"alert alert-success\">$message</p>\n";
     }
-    ?>
+?>
 
     <form method="POST" action="ShowPreviousSessions.php" class="well form-inline">
         <fieldset>
@@ -28,23 +30,23 @@ function RenderSearchPreviousSessions() {
                 <div class="span2">
                     <label for="currenttrack" class="control-label">Current Track: </label>
                     <select name="currenttrack" class="xspan2">
-                        <?php populate_select_from_table("Tracks", $SessionSearchParameters['currenttrack'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag ?>
+                        <?php populate_select_from_table("Tracks", $SessionSearchParameters['currenttrack'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag 
+                        ?>
                     </select>
                 </div>
                 <div class="span2">
                     <label for="previoustrack" class="control-label">Obsolete Track: </label>
                     <select name="previoustrack" class="xspan2">
                         <?php $query = <<<EOD
-SELECT
-        CONCAT(PC.previousconid,"a",PCT.previoustrackid), CONCAT(PC.previousconname,": ",PCT.trackname)
-    FROM
-        PreviousCons PC JOIN
-	PreviousConTracks PCT USING (previousconid) LEFT JOIN
-	TrackCompatibility TC USING (previousconid, previoustrackid)
-    WHERE
-        TC.currenttrackid IS NULL
-    ORDER BY
-        PC.display_order, PCT.previoustrackid
+SELECT CONCAT(PC.previousconid, "a", PCT.previoustrackid),
+       CONCAT(PC.previousconname, ": ", PCT.trackname)
+FROM PreviousCons PC
+JOIN PreviousConTracks PCT USING (previousconid)
+LEFT JOIN TrackCompatibility TC USING (previousconid,
+                                       previoustrackid)
+WHERE TC.currenttrackid IS NULL
+ORDER BY PC.display_order,
+         PCT.previoustrackid;
 EOD;
                         populate_select_from_query($query, $SessionSearchParameters['previouscontrack'], "ANY", true); ?>
                     </select>
@@ -52,47 +54,47 @@ EOD;
                 <div class="span2">
                     <label class="control-label" for="previouscon">Previous Con: </label>
                     <select name="previouscon" class="xspan2">
-                        <?php populate_select_from_table("PreviousCons", $SessionSearchParameters['previouscon'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag ?>
+                        <?php populate_select_from_table("PreviousCons", $SessionSearchParameters['previouscon'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag 
+                        ?>
                     </select>
                 </div>
                 <div class="span2">
                     <label class="control-label" for="type">Type: </label>
                     <select name="type" class="xspan2">
-                        <?php populate_select_from_table("Types", $SessionSearchParameters['type'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag ?>
+                        <?php populate_select_from_table("Types", $SessionSearchParameters['type'], "Any", true); //$table_name, $default_value, $option_0_text, $default_flag 
+                        ?>
                     </select>
                 </div>
                 <div class="span2">
                     <label class="control-label" for="status">Status: </label>
                     <select name="status" class="xspan2">
                         <?php $query = <<<EOD
-SELECT
-        ST.statusid, ST.statusname
-    FROM
-        SessionStatuses ST
-    WHERE
-        ST.statusid IN (SELECT DISTINCT previousstatusid FROM PreviousSessions)
-    ORDER BY
-        ST.display_order
+SELECT ST.statusid,
+       ST.statusname
+FROM SessionStatuses ST
+WHERE ST.statusid IN
+    (SELECT DISTINCT previousstatusid
+     FROM PreviousSessions)
+ORDER BY ST.display_order;
 EOD;
                         populate_select_from_query($query, $SessionSearchParameters['status'], "ANY", true); ?>
                     </select>
                 </div>
             </div>
-            <br/>
+            <br />
             <div class="row-fluid">
                 <label class="control-label" for="title">Title: </label>
                 <input type="text" name="title" size="40" value="<?php echo $SessionSearchParameters['title']; ?>">
                 <span class="help-inline">Enter a word or phrase for which to search. Leave blank for any.</span>
             </div>
-            <br/>
+            <br />
             <div class="row-fluid">
                 <label class="checkbox">
-                    <input type="checkbox"
-                           name="showimported" <?php echo $SessionSearchParameters['showimported'] ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="showimported" <?php echo $SessionSearchParameters['showimported'] ? 'checked' : ''; ?>>
                     Include in results sessions which have been imported already.
                 </label>
             </div>
-            <br/>
+            <br />
             <div class="row-fluid">
                 <button type="submit" class="btn btn-primary" value="search">Search</button>
             </div>
@@ -100,7 +102,8 @@ EOD;
     </form>
 <?php } // End of RenderSearchPreviousSessions()
 
-function HandleSearchParameters() {
+function HandleSearchParameters()
+{
     // parse parameters for Search of previous sessions and validate them
     // return true if successful, false otherwise
     global $SessionSearchParameters, $message_error, $message;
@@ -138,41 +141,59 @@ function HandleSearchParameters() {
     }
     $SessionSearchParameters['showimported'] = (isset($_POST['showimported'])) ? true : false;
     if ($SessionSearchParameters['previouscontrack'] != 0) {
-        sscanf($SessionSearchParameters['previouscontrack'], "%da%d", $SessionSearchParameters['previouscon2'],
-            $SessionSearchParameters['previoustrack']);
-        if ($SessionSearchParameters['previouscon'] != 0 &&
-            $SessionSearchParameters['previouscon'] != $SessionSearchParameters['previouscon2']) {
+        sscanf(
+            $SessionSearchParameters['previouscontrack'],
+            "%da%d",
+            $SessionSearchParameters['previouscon2'],
+            $SessionSearchParameters['previoustrack']
+        );
+        if (
+            $SessionSearchParameters['previouscon'] != 0 &&
+            $SessionSearchParameters['previouscon'] != $SessionSearchParameters['previouscon2']
+        ) {
             $message_error = "<i>Previous Track</i> is not from the con indicated by <i>Previous Con</i> so no results can be returned.";
             return (false);
         }
     }
-    if (isset($SessionSearchParameters['previoustrack']) && $SessionSearchParameters['previoustrack'] != 0 &&
-        $SessionSearchParameters['currenttrack'] != 0) {
+    if (
+        isset($SessionSearchParameters['previoustrack']) && $SessionSearchParameters['previoustrack'] != 0 &&
+        $SessionSearchParameters['currenttrack'] != 0
+    ) {
         $message_error = "<i>Previous Track</i> and <i>Current Track</i> are both specified so no results can be returned.";
-        Return (FALSE);
+        return (FALSE);
     }
     $message_error = '';
     return (true);
 } // End of HandleSearchParameters()
-    
-function PerformPrevSessionSearch () {
-    global $SessionSearchParameters, $message_error,$message,$result,$linki;
-    $query= <<<EOD
-SELECT
-        PS.title, PS.progguiddesc, PS.previousconid, PS.previoussessionid, PS.importedsessionid, TY.typename,
-        PC.previousconname, SS.statusname, PCT.trackname
-    FROM
-                  PreviousSessions PS
-             JOIN PreviousCons PC USING (previousconid)
-             JOIN PreviousConTracks PCT USING (previousconid, previoustrackid)
-             JOIN Types TY USING (typeid)
-             JOIN SessionStatuses SS ON PS.previousstatusid = SS.statusid
-        LEFT JOIN TrackCompatibility TC USING (previousconid, previoustrackid)
+
+function PerformPrevSessionSearch()
+{
+    global $SessionSearchParameters, $message_error, $message, $result, $linki;
+    $query = <<<EOD
+SELECT PS.title,
+       PS.progguiddesc,
+       PS.previousconid,
+       PS.previoussessionid,
+       PS.importedsessionid,
+       TY.typename,
+       PC.previousconname,
+       SS.statusname,
+       PCT.trackname
+FROM PreviousSessions PS
+JOIN PreviousCons PC USING (previousconid)
+JOIN PreviousConTracks PCT USING (previousconid,
+                                  previoustrackid)
+JOIN Types TY USING (typeid)
+JOIN SessionStatuses SS ON PS.previousstatusid = SS.statusid
+LEFT JOIN TrackCompatibility TC USING (previousconid,
+                                       previoustrackid)
 EOD;
-    if ($SessionSearchParameters['currenttrack'] != 0 || $SessionSearchParameters['previouscontrack'] != 0 ||
+    if (
+        $SessionSearchParameters['currenttrack'] != 0 || $SessionSearchParameters['previouscontrack'] != 0 ||
         $SessionSearchParameters['previouscon'] != 0 || $SessionSearchParameters['type'] != 0 ||
         $SessionSearchParameters['status'] != 0 || $SessionSearchParameters['title'] != '' ||
-        !$SessionSearchParameters['showimported']) {
+        !$SessionSearchParameters['showimported']
+    ) {
         $query .= " WHERE";
     }
     if ($SessionSearchParameters['currenttrack'] != 0) {
@@ -212,10 +233,11 @@ EOD;
     return (true);
 } // End of PerformPrevSessionSearch()
 
-function RenderSearchPrevSessionResults() {
+function RenderSearchPrevSessionResults()
+{
     global $result;
     $result_array = array();
-    while ($result_array[] = mysqli_fetch_array($result, MYSQLI_ASSOC)) ;
+    while ($result_array[] = mysqli_fetch_array($result, MYSQLI_ASSOC));
     array_pop($result_array);
     echo "<div class=\"row-fluid\"><form method=POST action=\"SubmitImportSessions.php\" class=\"form-horizontal\">\n";
     echo "<div class=\"clearfix\"><button type=submit class=\"btn btn-primary pull-right\" value=\"submitimport\">Import</button></div>\n";
@@ -241,7 +263,8 @@ function RenderSearchPrevSessionResults() {
     echo "</table><hr /><div class=\"clearfix\"><button type=submit class=\"btn btn-primary pull-right \" value=\"submitimport\">Import</button></div></form>\n";
 }  // End of RenderSearchPrevSessionResults()
 
-function ProcessImportSessions() {
+function ProcessImportSessions()
+{
     global $linki, $message, $message_error;
     if (!isset($_POST['lastrownum'])) {
         $message_error = "This page is intended to be reached from a form.  One or more required ";
@@ -258,6 +281,7 @@ function ProcessImportSessions() {
         if (isset($_POST["import$i"])) {
             $previousconid = mysqli_real_escape_string($linki, $_POST["previousconid$i"]);
             $previoussessionid = mysqli_real_escape_string($linki, $_POST["previoussessionid$i"]);
+            // FIXME What's this then? Replace with EOD.
             $query2 = "INSERT INTO Sessions\n";
             $query2 .= "        (sessionid, trackid, typeid, divisionid, pubstatusid, \n";
             $query2 .= "        languagestatusid, pubsno, title, secondtitle, pocketprogtext, \n";

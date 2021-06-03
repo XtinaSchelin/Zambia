@@ -10,4 +10,3 @@ if ($participant_array = retrieveFullParticipant($badgeid)) {
 $message_error = $message2 . "<br />Error retrieving data from DB.  No further execution possible.";
 RenderError($message_error);
 exit();
-?>

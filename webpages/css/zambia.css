@@ -87,10 +87,6 @@ form.navbar-search {
 /**
  * STYLES
  */
-body {
-  background-image: url('../images/light_honeycomb.png');
-  background-repeat: repeat;
-}
 a {
   color: #04C;
 }

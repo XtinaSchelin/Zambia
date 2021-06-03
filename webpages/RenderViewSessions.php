@@ -1,10 +1,11 @@
 <?php
 // Copyright (c) 2005-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function RenderViewSessions($result) {
+function RenderViewSessions($result)
+{
     global $title;
     $title = "Session Query Results";
     staff_header($title);
-    ?>
+?>
     <table class="table table-condensed table-hover">
         <col>
         <col>
@@ -35,7 +36,7 @@ function RenderViewSessions($result) {
         }
         ?>
     </table>
-    <?php
+<?php
     staff_footer();
 }
 ?>

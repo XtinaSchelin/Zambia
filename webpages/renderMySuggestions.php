@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2005-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function renderMySuggestions($title, $error, $message, $paneltopics, $otherideas, $suggestedguests) {
+function renderMySuggestions($title, $error, $message, $paneltopics, $otherideas, $suggestedguests)
+{
     participant_header($title);
     if ($error) {
         echo "<p class=\"alert alert-error\">" . $message . "</p>";
@@ -42,4 +43,4 @@ function renderMySuggestions($title, $error, $message, $paneltopics, $otherideas
     echo "</div>\n";
     echo "</form>\n";
     participant_footer();
-} ?>
+}

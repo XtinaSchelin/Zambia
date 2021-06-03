@@ -1,7 +1,7 @@
 <?php
 // Copyright (c) 2011-2017 Peter Olszowka. All rights reserved. See copyright document for more details.
 global $fullPage, $title;
-$title="Grid Scheduler";
+$title = "Grid Scheduler";
 $fullPage = true; // changes body class to support all content restricted to screen size
 require_once('db_functions.php');
 require_once('StaffHeader.php');
@@ -14,9 +14,10 @@ require_once('StaffMaintainSchedule_FNC.php');
 staff_header($title);
 //staffHeaderOnePage($title);
 ?>
-	<!-- start off contained in #fullPageContainer div which is full width and full height -->
+<!-- start off contained in #fullPageContainer div which is full width and full height -->
 <div id="mainContentContainer" class="secondaryFullWidthContainer">
-	<div style="position: absolute; top:0; bottom: 0; left:0; height: auto; width: 280px; margin: 2px 1px 2px 2px; border: 1px solid black"><!-- ### LEFT COLUMN ###-->
+	<div style="position: absolute; top:0; bottom: 0; left:0; height: auto; width: 280px; margin: 2px 1px 2px 2px; border: 1px solid black">
+		<!-- ### LEFT COLUMN ###-->
 		<div id="tabs" style="position: absolute; top:0; left:0; right:0; height: 40%; width: auto; border-bottom: 1px solid black">
 			<div id="tabsBar" style="position: absolute; top:0; left:0; right:0; width: auto; ">
 				<ul>
@@ -28,25 +29,25 @@ staff_header($title);
 			</div>
 			<div id="tabsContent" style="position: absolute; right:0; left:0; bottom:0; height: auto; width:auto">
 				<div id="tabs-rooms" style="position: absolute; top:0; right:0; bottom: 0; left: 0; height: auto; width: auto; overflow:auto;">
-					<?php getRoomsForScheduler(); ?>	
+					<?php getRoomsForScheduler(); ?>
 				</div>
 				<div id="tabs-sessions" style="position: absolute; top:0; right:0; bottom: 0; left: 0; height: auto; width: auto; overflow:auto; margin: 2px">
 					<div style="height: 28px">
 						<div style="display:inline-block; width:75px"><label for="track">Track:</label></div>
 						<span class="newformselectspan">
-							<select id="trackSEL" name="track" class="newformselect"><?php populate_select_from_table("Tracks",0,"ANY",true); ?></select>
+							<select id="trackSEL" name="track" class="newformselect"><?php populate_select_from_table("Tracks", 0, "ANY", true); ?></select>
 						</span>
 					</div>
 					<div style="height: 28px">
 						<div style="display:inline-block; width:75px"><label for="type">Type:</label></div>
 						<span class="newformselectspan">
-							<select id="typeSEL" name="type" class="newformselect"><?php populate_select_from_table("Types",0,"ANY",true); ?></select>
+							<select id="typeSEL" name="type" class="newformselect"><?php populate_select_from_table("Types", 0, "ANY", true); ?></select>
 						</span>
 					</div>
 					<div style="height: 28px">
 						<div style="display:inline-block; width:75px"><label for="division">Division:</label></div>
 						<span class="newformselectspan">
-							<select id="divisionSEL" name="division" class="newformselect"><?php populate_select_from_table("Divisions",0,"ANY",true); ?></select>
+							<select id="divisionSEL" name="division" class="newformselect"><?php populate_select_from_table("Divisions", 0, "ANY", true); ?></select>
 						</span>
 					</div>
 					<div style="height: 28px">
@@ -66,9 +67,9 @@ staff_header($title);
 						<span class="newformnotetight">Leave blank for "any".</span>
 					</div>
 					<div style="text-align: center">
-						<button id="retrieveSessionsBUT" type="button" class="btn btn-primary" >Retrieve</button>
+						<button id="retrieveSessionsBUT" type="button" class="btn btn-primary">Retrieve</button>
 						<!--<div id="retrieveSessionsBUT">Retrieve</div>-->
-						<button id="resetSessionsSearchBUT" type="button" class="btn" >Reset Search</button>
+						<button id="resetSessionsSearchBUT" type="button" class="btn">Reset Search</button>
 						<!--<div id="resetSessionsSearchBUT">Reset Search</div>-->
 					</div>
 					<div id="noSessionsFoundMSG" style="text-align: center; font-weight:bold; color:red; display:none; margin-top:3px">
@@ -89,20 +90,19 @@ staff_header($title);
 				<div style="position: absolute; left:0; right:0; width: auto; top:19px; padding: 3px; text-align:center;">
 					<span style="padding:0;"><button id="clearAllButton" class="btn">Clear All</button></span>
 					<span style="padding:0;"><button id="swapModeCheck" class="btn" mychecked="false">Swap Mode</button></span>
-					<img id="fileCabinetIMG" style="display:inline; vertical-align:middle" height="65" width="49" src="images/FileCabinetClosed.png" onmouseover="staffMaintainSchedule.fileCabinetSwap(true);"
-						onmouseout="staffMaintainSchedule.fileCabinetSwap(false);" />
+					<img id="fileCabinetIMG" style="display:inline; vertical-align:middle" height="65" width="49" src="images/FileCabinetClosed.png" onmouseover="staffMaintainSchedule.fileCabinetSwap(true);" onmouseout="staffMaintainSchedule.fileCabinetSwap(false);" />
 				</div>
 			</div>
-			<div id = "sessionsToBeSchedContainer" style="position: absolute; left:0; right:0; bottom:0; top: 90px; height: auto; width:auto; border: 3px solid white">
+			<div id="sessionsToBeSchedContainer" style="position: absolute; left:0; right:0; bottom:0; top: 90px; height: auto; width:auto; border: 3px solid white">
 				<div id="sessionsToBeScheduled" style="height: 100%; overflow-y:auto; overflow-x: hidden;">&nbsp;</div>
 			</div>
 		</div>
 	</div>
 	<div style="position: absolute; top:0; bottom: 0; left:282px; right: 0; height: auto; width: auto; margin: 2px 2px 2px 1px; border: 1px solid black">
-		<div id="scheduleGridContainer" class = "fullBlockContainer" style="margin: 2px; overflow:auto">&nbsp;</div>
+		<div id="scheduleGridContainer" class="fullBlockContainer" style="margin: 2px; overflow:auto">&nbsp;</div>
 	</div>
 </div>
 </div><!-- closes #fullPageContainer -->
 </body>
-</html>
 
+</html>

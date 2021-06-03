@@ -29,20 +29,16 @@ if ($rows == 0) {
 }
 mysqli_free_result($result);
 $query = <<<EOD
-SELECT
-        PHR.badgeid, R.roleid, R.rolename
-    FROM
-            Roles R
-            LEFT JOIN (
-                SELECT
-                        badgeid, roleid
-                    FROM
-                        ParticipantHasRole
-                    WHERE
-                        badgeid='$badgeid'
-                    ) as PHR USING (roleid)
-    ORDER BY
-        R.display_order;
+SELECT PHR.badgeid,
+       R.roleid,
+       R.rolename
+FROM Roles R
+LEFT JOIN
+  (SELECT badgeid,
+          roleid
+   FROM ParticipantHasRole
+   WHERE badgeid='$badgeid' ) AS PHR USING (roleid)
+ORDER BY R.display_order;
 EOD;
 
 if (!$result = mysqli_query_exit_on_error($query)) {
@@ -59,4 +55,3 @@ $error = false;
 $message = "";
 renderMyInterests($title, $error, $message, $rolearray);
 participant_footer();
-?>

@@ -5,7 +5,8 @@ require_once('data_functions.php');
 require_once('StaffCommonCode.php');
 require_once('SubmitMaintainRoom.php');
 
-function retrieveRoomsTable() {
+function retrieveRoomsTable()
+{
     global $message_error, $unitsPerBlock, $standardRowHeight, $title;
     $foo = "";
     if (STANDARD_BLOCK_LENGTH == "1:30") {
@@ -23,8 +24,11 @@ function retrieveRoomsTable() {
     $roomsToDisplayArray = $_POST["roomsToDisplayArray"];
     $roomsToDisplayList = implode(",", $roomsToDisplayArray);
     $queryArray["rooms"] = <<<EOD
-SELECT R.roomid, R.roomname FROM Rooms R WHERE R.roomid IN ($roomsToDisplayList)
-	ORDER BY R.display_order
+SELECT R.roomid,
+       R.roomname
+FROM Rooms R
+WHERE R.roomid IN ($roomsToDisplayList)
+ORDER BY R.display_order;
 EOD;
     if (($resultXML = mysql_query_XML($queryArray)) === false) {
         RenderError($message_error, true);
@@ -49,19 +53,26 @@ EOD;
     $roomsHtml = $xslt->transformToXML($resultXML);
     $htmlTimesArray = getScheduleTimesArray($roomsToDisplayList);
     $query = <<<EOD
-SELECT
-		SCH.scheduleid, SCH.roomid, SCH.starttime, ADDTIME(SCH.starttime, S.duration) AS endtime,
-	 	S.sessionid, S.title, S.progguiddesc, TR.trackname, TY.typename, D.divisionname, S.duration
-	FROM
-			 Schedule SCH
-		JOIN Sessions S USING (sessionid)
-		JOIN Tracks TR USING (trackid)
-		JOIN Types TY USING (typeid)
-		JOIN Divisions D USING (divisionid)
-	WHERE
-		SCH.roomid IN ($roomsToDisplayList)
-	ORDER BY
-		SCH.roomid, SCH.starttime, endtime DESC;
+SELECT SCH.scheduleid,
+       SCH.roomid,
+       SCH.starttime,
+       ADDTIME(SCH.starttime, S.duration) AS endtime,
+       S.sessionid,
+       S.title,
+       S.progguiddesc,
+       TR.trackname,
+       TY.typename,
+       D.divisionname,
+       S.duration
+FROM Schedule SCH
+JOIN Sessions S USING (sessionid)
+JOIN Tracks TR USING (trackid)
+JOIN Types TY USING (typeid)
+JOIN Divisions D USING (divisionid)
+WHERE SCH.roomid IN ($roomsToDisplayList)
+ORDER BY SCH.roomid,
+         SCH.starttime,
+         endtime DESC;
 EOD;
     $result = mysqli_query_with_error_handling($query);
     $scheduleArray = array();
@@ -82,7 +93,8 @@ EOD;
             "trackname" => $row["trackname"],
             "typename" => $row["typename"],
             "divisionname" => $row["divisionname"],
-            "duration" => $row["duration"]);
+            "duration" => $row["duration"]
+        );
     }
     $roomsHTMLArray = array();
     foreach ($roomsToDisplayArray as $roomIndex => $roomId) {
@@ -105,7 +117,8 @@ EOD;
     echo "</table>\n";
 }
 
-function getScheduleTimesArray($roomsToDisplayList) {
+function getScheduleTimesArray($roomsToDisplayList)
+{
     global $message_error, $unitsPerBlock, $standardRowHeight;
     $htmlTimesArray = array();
     $nextStartTimeUnits = 0;
@@ -158,11 +171,11 @@ function getScheduleTimesArray($roomsToDisplayList) {
             $previousCutoffTimeStr = "MAKETIME(" . floor($previousCutoffUnits / 2) . ",0,0)";
             $query = <<<EOD
 SELECT MAX(ADDTIME(SCH.starttime, S.duration)) AS endtime
-	FROM Schedule SCH JOIN Sessions S USING(sessionid)
-	WHERE
-			SCH.roomid IN ($roomsToDisplayList)
-		AND ADDTIME(SCH.starttime, S.duration) < $thisCutoffTimeStr
-		AND SCH.starttime >= $previousCutoffTimeStr;
+FROM Schedule SCH
+JOIN Sessions S USING(sessionid)
+WHERE SCH.roomid IN ($roomsToDisplayList)
+  AND ADDTIME(SCH.starttime, S.duration) < $thisCutoffTimeStr
+  AND SCH.starttime >= $previousCutoffTimeStr;
 EOD;
             $result = mysqli_query_with_error_handling($query);
             if (!$result) {
@@ -187,10 +200,10 @@ EOD;
             } else {
                 $query = <<<EOD
 SELECT MIN(SCH.starttime) AS starttime
-	FROM Schedule SCH JOIN Sessions S USING(sessionid)
-	WHERE
-			SCH.roomid IN ($roomsToDisplayList)
-		AND ADDTIME(SCH.starttime, S.duration) >= $thisCutoffTimeStr;
+FROM Schedule SCH
+JOIN Sessions S USING(sessionid)
+WHERE SCH.roomid IN ($roomsToDisplayList)
+  AND ADDTIME(SCH.starttime, S.duration) >= $thisCutoffTimeStr;
 EOD;
                 $result = mysqli_query_with_error_handling($query, true, true);
                 $row = mysqli_fetch_assoc($result);
@@ -219,8 +232,9 @@ EOD;
             //finding end for last day now
             $query = <<<EOD
 SELECT MAX(ADDTIME(SCH.starttime, S.duration)) AS endtime
-	FROM Schedule SCH JOIN Sessions S USING(sessionid)
-	WHERE SCH.roomid IN ($roomsToDisplayList);
+FROM Schedule SCH
+JOIN Sessions S USING(sessionid)
+WHERE SCH.roomid IN ($roomsToDisplayList);
 EOD;
             $result = mysqli_query_with_error_handling($query, true, true);
             $row = mysqli_fetch_assoc($result);
@@ -276,7 +290,8 @@ EOD;
     return $htmlTimesArray;
 }
 
-function getHTMLforRoom($roomId, $htmlTimesArray, $scheduleArray) {
+function getHTMLforRoom($roomId, $htmlTimesArray, $scheduleArray)
+{
     global $thisRoomSchedArray, $key, $thisSlotEndUnits, $blockHTML, $thisSlotLength, $thisSlotBeginUnits, $standardRowHeight;
     $roomHTMLColumn = array();
     $schedLength = count($htmlTimesArray);
@@ -284,8 +299,8 @@ function getHTMLforRoom($roomId, $htmlTimesArray, $scheduleArray) {
     reset($thisRoomSchedArray);
     $key = key($thisRoomSchedArray);
     $i = 1;
-    do {//length counted from 0, but we're skipping 1st one (numbered 0)
-        if ($htmlTimesArray[$i]["mode"] == -1) {// gap
+    do { //length counted from 0, but we're skipping 1st one (numbered 0)
+        if ($htmlTimesArray[$i]["mode"] == -1) { // gap
             $roomHTMLColumn[$i] = "<td class=\"gap schedulerGridRoom\">&nbsp;</td>";
             $i++;
             continue;
@@ -327,7 +342,8 @@ function getHTMLforRoom($roomId, $htmlTimesArray, $scheduleArray) {
     return $roomHTMLColumn;
 }
 
-function doABlock($roomId) {
+function doABlock($roomId)
+{
     global $thisRoomSchedArray, $key, $thisSlotEndUnits, $blockHTML, $thisSlotLength, $thisSlotBeginUnits, $thisSlot, $standardRowHeight;
     if (!isset($thisRoomSchedArray[$key]) || $thisRoomSchedArray[$key]["startTimeUnits"] >= $thisSlotEndUnits) {
         // room is empty
@@ -400,8 +416,10 @@ function doABlock($roomId) {
     for ($thisSlot = $thisSlotBeginUnits; $thisSlot < $thisSlotEndUnits; $thisSlot++) {
         $slotCounter[$thisSlot] = 0;
         for ($thisKey = $key; $thisKey <= $key + $i; $thisKey++) {
-            if ($thisSlot >= $thisRoomSchedArray[$thisKey]["startTimeUnits"] &&
-                $thisSlot < $thisRoomSchedArray[$thisKey]["endTimeUnits"]) {
+            if (
+                $thisSlot >= $thisRoomSchedArray[$thisKey]["startTimeUnits"] &&
+                $thisSlot < $thisRoomSchedArray[$thisKey]["endTimeUnits"]
+            ) {
                 $slotCounter[$thisSlot]++;
                 if ($slotCounter[$thisSlot] > 2) {
                     renderComplicatedBlock($roomId);
@@ -433,7 +451,8 @@ function doABlock($roomId) {
     $key += $i + 1;
 }
 
-function doACompSlot(&$ScheduledUpTo, $thisSlot, &$thisKey, $i, $roomId) {
+function doACompSlot(&$ScheduledUpTo, $thisSlot, &$thisKey, $i, $roomId)
+{
     global $key, $thisSlotBeginUnits, $thisSlotEndUnits, $blockHTML, $thisRoomSchedArray, $standardRowHeight;
     if ($ScheduledUpTo == $thisSlot) {
         if ($thisKey > $key + $i) {
@@ -498,7 +517,8 @@ function doACompSlot(&$ScheduledUpTo, $thisSlot, &$thisKey, $i, $roomId) {
     }
 }
 
-function renderComplicatedBlock($roomId) {
+function renderComplicatedBlock($roomId)
+{
     global $thisSlotLength, $thisSlotBeginUnits, $thisSlotEndUnits, $blockHTML, $standardRowHeight;
     $blockHTML = "<td class=\"schedulerGridRoom schedulerGridSlot\" complicatedBlock=\"true\"";
     if ($thisSlotLength > 1)
@@ -509,7 +529,8 @@ function renderComplicatedBlock($roomId) {
     $blockHTML .= "Block too complicated to render</div></td>";
 }
 
-function emptySchedBlock($roomId) {
+function emptySchedBlock($roomId)
+{
     global $thisSlotLength, $thisSlotBeginUnits, $thisSlotEndUnits, $standardRowHeight;
     $blockHTML = "<td class=\"schedulerGridRoom schedulerGridSlot\"";
     if ($thisSlotLength > 1)
@@ -521,25 +542,41 @@ function emptySchedBlock($roomId) {
     return $blockHTML;
 }
 
-function retrieveSessionInfo() {
+function retrieveSessionInfo()
+{
     global $message_error;
     $ConStartDatim = CON_START_DATIM;
     $sessionid = isset($_POST["sessionid"]) ? $_POST["sessionid"] : false;
     $query["sessions"] = <<<EOD
-SELECT
-		S.sessionid, S.title, S.progguiddesc, S.notesforprog, TR.trackname, TY.typename, D.divisionname,
-		DATE_FORMAT(ADDTIME('$ConStartDatim',SCH.starttime),'%a %l:%i %p') as starttime,
-		DATE_FORMAT(ADDTIME('$ConStartDatim',ADDTIME(SCH.starttime, S.duration)),'%a %l:%i %p') as endtime,
-		TIME_FORMAT(S.duration, '%H:%i') AS duration, SCH.roomid, R.roomname
-	FROM Sessions S JOIN Tracks TR USING (trackid) JOIN Types TY USING (typeid)
-		JOIN Divisions D USING (divisionid) LEFT JOIN Schedule SCH USING (sessionid)
-		LEFT JOIN Rooms R USING (roomid)
-	WHERE S.sessionid = $sessionid;
+SELECT S.sessionid,
+       S.title,
+       S.progguiddesc,
+       S.notesforprog,
+       TR.trackname,
+       TY.typename,
+       D.divisionname,
+       DATE_FORMAT(ADDTIME('$ConStartDatim', SCH.starttime), '%a %l:%i %p') AS starttime,
+       DATE_FORMAT(ADDTIME('$ConStartDatim', ADDTIME(SCH.starttime, S.duration)), '%a %l:%i %p') AS endtime,
+       TIME_FORMAT(S.duration, '%H:%i') AS duration,
+       SCH.roomid,
+       R.roomname
+FROM Sessions S
+JOIN Tracks TR USING (trackid)
+JOIN Types TY USING (typeid)
+JOIN Divisions D USING (divisionid)
+LEFT JOIN Schedule SCH USING (sessionid)
+LEFT JOIN Rooms R USING (roomid)
+WHERE S.sessionid = $sessionid;
 EOD;
     $query["participants"] = <<<EOD
-SELECT POS.moderator, CD.badgename, P.badgeid, COALESCE(P.pubsname, CONCAT(CD.firstname, ' ', CD.lastname)) AS participantname
-	FROM ParticipantOnSession POS JOIN Participants P USING (badgeid) JOIN CongoDump CD USING (badgeid)
-	WHERE POS.sessionid = $sessionid;
+SELECT POS.moderator,
+       CD.badgename,
+       P.badgeid,
+       COALESCE(P.pubsname, CONCAT(CD.firstname, ' ', CD.lastname)) AS participantname
+FROM ParticipantOnSession POS
+JOIN Participants P USING (badgeid)
+JOIN CongoDump CD USING (badgeid)
+WHERE POS.sessionid = $sessionid;
 EOD;
     $resultXML = mysql_query_XML($query);
     if (!$resultXML) {
@@ -559,10 +596,10 @@ EOD;
         trigger_error('XSL transformation failed.', E_USER_ERROR);
     }
     exit();
-
 }
 
-function editSchedule() {
+function editSchedule()
+{
     global $linki, $message, $message_error;
     //usleep(500000);
     $returnTable = isset($_POST["returnTable"]) ? $_POST["returnTable"] : false;
@@ -644,15 +681,15 @@ function editSchedule() {
         retrieveRoomsTable();
         echo "<div id=\"warningsDivContent\">$warnMsg</div>";
     } else {
-        echo($warnMsg);
+        echo ($warnMsg);
         foreach ($SchedInsQueryArray as $thisSessionId => $thisScheduleId) {
             echo "<div class=\"insertedScheduleId\" sessionId=\"$thisSessionId\" scheduleId=\"$thisScheduleId\"></div>";
         }
-
     }
 }
 
-function retrieveSessions() {
+function retrieveSessions()
+{
     global $linki, $message_error;
     $currSessionIdArray = isset($_POST["currSessionIdArray"]) ? $_POST["currSessionIdArray"] : array();
     $trackId = intval($_POST["trackId"]);
@@ -661,12 +698,24 @@ function retrieveSessions() {
     $sessionId = intval($_POST["sessionId"]);
     $title = mysqli_real_escape_string($linki, stripslashes($_POST["title"]));
     $query["sessions"] = <<<EOD
-SELECT S.sessionid, S.title, S.progguiddesc, TR.trackname, TY.typename, D.divisionname,
-	FLOOR((HOUR(S.duration) * 60 + MINUTE(S.duration) + 29) / 30) AS durationUnits,
-	S.duration
-	FROM Sessions S JOIN Tracks TR USING (trackid) JOIN Types TY USING (typeid)
-		JOIN Divisions D USING (divisionid)
-	WHERE S.statusid IN (2,3,7) AND S.sessionid NOT IN (SELECT sessionid FROM Schedule)
+SELECT S.sessionid,
+       S.title,
+       S.progguiddesc,
+       TR.trackname,
+       TY.typename,
+       D.divisionname,
+       FLOOR((HOUR(S.duration) * 60 + MINUTE(S.duration) + 29) / 30) AS durationUnits,
+       S.duration
+FROM Sessions S
+JOIN Tracks TR USING (trackid)
+JOIN Types TY USING (typeid)
+JOIN Divisions D USING (divisionid)
+WHERE S.statusid IN (2,
+                     3,
+                     7)
+  AND S.sessionid NOT IN
+    (SELECT sessionid
+     FROM Schedule);
 EOD;
     if ($trackId != 0) {
         $query["sessions"] .= " AND S.trackid = $trackId";
@@ -738,4 +787,3 @@ switch ($ajax_request_action) {
     default:
         exit();
 }
-?>

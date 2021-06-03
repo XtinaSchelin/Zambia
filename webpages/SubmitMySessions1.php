@@ -51,4 +51,3 @@ $session_interest_count = get_session_interests_from_db($badgeid); // Returns co
 get_si_session_info_from_db($session_interest_count); // Will render its own errors
 $message = $messageSave . $message;
 render_session_interests($session_interest_count, $message, "", false, false); // includes footer
-?>        

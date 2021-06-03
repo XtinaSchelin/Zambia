@@ -4,7 +4,8 @@
 // reads post variable to populate email array
 // returns email array or false if an error was encountered.
 // A message describing the problem will be stored in global variable $message_error
-function get_email_from_post() {
+function get_email_from_post()
+{
     global $message_error;
     $message_error = "";
     $email['sendto'] = getString('sendto');
@@ -17,7 +18,8 @@ function get_email_from_post() {
 
 // function $OK=validate_email($email)
 // Checks if values in $email array are acceptible
-function validate_email($email) {
+function validate_email($email)
+{
     global $message;
     $message = "";
     $OK = true;
@@ -35,7 +37,8 @@ function validate_email($email) {
 // function $email=set_email_defaults()
 // Sets values for $email array to be used as defaults for the email
 // form when first entering page.
-function set_email_defaults() {
+function set_email_defaults()
+{
     $email['sendto'] = 1; // default to all participants
     $email['sendfrom'] = 1; // default to Programming email
     $email['sendcc'] = 1; // default to None
@@ -50,7 +53,8 @@ function set_email_defaults() {
 // $message_warning will be displayed at the top, only if set
 // This function will render the entire page.
 // This page will next go to the StaffSendEmailCompose_POST page
-function render_send_email($email, $message_warning) {
+function render_send_email($email, $message_warning)
+{
     global $title;
     $title = "Send Email to Participants";
     require_once('StaffHeader.php');
@@ -97,7 +101,8 @@ function render_send_email($email, $message_warning) {
 
 // function renderQueueEmail($goodCount,$arrayOfGood,$badCount,$arrayOfBad)
 //
-function renderQueueEmail($goodCount, $arrayOfGood, $badCount, $arrayOfBad) {
+function renderQueueEmail($goodCount, $arrayOfGood, $badCount, $arrayOfBad)
+{
     global $title;
     $title = "Results of Queueing Email";
     require_once('StaffHeader.php');
@@ -133,7 +138,8 @@ function renderQueueEmail($goodCount, $arrayOfGood, $badCount, $arrayOfBad) {
 //   recipient_list, emailfrom, body
 // This function will render the entire page.
 // This page will next go to the StaffSendEmailResults_POST page
-function render_verify_email($email, $email_verify, $message_warning) {
+function render_verify_email($email, $email_verify, $message_warning)
+{
     global $title;
     $title = "Send Email";
     require_once('StaffHeader.php');
@@ -162,7 +168,8 @@ function render_verify_email($email, $email_verify, $message_warning) {
     staff_footer();
 }
 
-function render_send_email_engine($email, $message_warning) {
+function render_send_email_engine($email, $message_warning)
+{
     global $title;
     $title = "Pretend to actually send email.";
     require_once('StaffHeader.php');
@@ -177,7 +184,8 @@ function render_send_email_engine($email, $message_warning) {
 }
 
 // "0" don't show schedule; "1" show events schedule; "2" show full schedule; "3" error condition
-function checkForShowSchedule($body) {
+function checkForShowSchedule($body)
+{
     global $message;
     $body = "\r\n" . $body . "\r\n";
     if (preg_match('/\\$EVENTS_SCHEDULE\\$/u', $body) === 1) {
@@ -208,7 +216,8 @@ function checkForShowSchedule($body) {
     }
 }
 
-function renderDuration($durMin, $durHrs) {
+function renderDuration($durMin, $durHrs)
+{
     if (($durMin === "0" || $durMin === "00") && ($durHrs === "0" || $durHrs === "00")) {
         return "";
     } else if ($durHrs === "0" || $durHrs === "00") {
@@ -221,14 +230,18 @@ function renderDuration($durMin, $durHrs) {
 }
 
 // status: "1" show events schedule; "2" show full schedule;
-function generateSchedules($status, $recipientinfo) {
+function generateSchedules($status, $recipientinfo)
+{
     $ConStartDatim = CON_START_DATIM;
     if ($status === "1") {
         $extraWhereClause = "        AND S.divisionid=3"; // events
     } else {
         $extraWhereClause = "";
     }
-    $badgeidArr = array_map(function($str){global $linki;return "'" . mysqli_real_escape_string($linki, $str) . "'";}, array_column($recipientinfo, 'badgeid'));
+    $badgeidArr = array_map(function ($str) {
+        global $linki;
+        return "'" . mysqli_real_escape_string($linki, $str) . "'";
+    }, array_column($recipientinfo, 'badgeid'));
     $badgeidList = implode(",", $badgeidArr);
     $query = <<<EOD
 SELECT
@@ -261,5 +274,3 @@ EOD;
     }
     return $returnResult;
 }
-
-?>

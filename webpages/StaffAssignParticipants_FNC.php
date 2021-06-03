@@ -1,7 +1,8 @@
 <?php
 //	Copyright (c) 2011-2018 Peter Olszowka. All rights reserved. See copyright document for more details.
 
-function SubmitAssignParticipants() {
+function SubmitAssignParticipants()
+{
     // NOTES
     // U - added to panel not as moderator
     // V - added to panel as moderator
@@ -113,7 +114,7 @@ function SubmitAssignParticipants() {
             $removeParticipantNode = $participantChangeNode->appendChild($removeParticipantNode);
             $removeParticipantNode->setAttribute("badgeid", $removeParticipant);
         }
-        echo($resultXML->saveXML()); //for debugging only
+        echo ($resultXML->saveXML()); //for debugging only
         $xsl = new DomDocument;
         $xsl->load('xsl/StaffAssignParticipantsBadTimestamp.xsl');
         $xslt = new XsltProcessor();
@@ -177,16 +178,18 @@ function SubmitAssignParticipants() {
             $query = "UPDATE Sessions SET notesforprog = \"$NPStext\" WHERE sessionid = $selsessionid;";
             $result = mysqli_query_exit_on_error($query);
             $query = <<<EOD
-INSERT INTO SessionEditHistory
-		(sessionid, badgeid, name, email_address, sessioneditcode, editdescription, statusid)
-	SELECT
-			$selsessionid, CD.badgeid, CONCAT(CD.firstName, " ", CD.lastname), CD.email, 3,
-				"Edit notes for program committee",
-				(SELECT statusid FROM Sessions WHERE sessionid = $selsessionid)
-		FROM
-			CongoDump CD
-		WHERE
-			badgeid = "{$_SESSION['badgeid']}";
+INSERT INTO SessionEditHistory (sessionid, badgeid, name, email_address, sessioneditcode, editdescription, statusid)
+SELECT $selsessionid,
+       CD.badgeid,
+       CONCAT(CD.firstName, " ", CD.lastname),
+       CD.email,
+       3,
+       "Edit notes for program committee",
+  (SELECT statusid
+   FROM Sessions
+   WHERE sessionid = $selsessionid)
+FROM CongoDump CD
+WHERE badgeid = "{$_SESSION['badgeid']}";
 EOD;
             $result = mysqli_query_exit_on_error($query);
             $message .= "Notes for program staff updated. ";
@@ -197,4 +200,3 @@ EOD;
         echo "<p class=\"alert alert-success\">$message</p>\n";
     } // close of timestamps match -- update db
 } // end of function SubmitAssignParticipants()
-?>    

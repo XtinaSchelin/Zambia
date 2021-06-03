@@ -6,8 +6,7 @@ require_once('db_functions.php');
 require_once('validation_functions.php');
 // inclusion of configuration file db_name.php occurs here
 if (prepare_db_and_more() === false) {
-    $message_error="Unable to connect to database.<br />No further execution possible.";
+    $message_error = "Unable to connect to database.<br />No further execution possible.";
     RenderError($message_error);
     exit();
 };
-?>

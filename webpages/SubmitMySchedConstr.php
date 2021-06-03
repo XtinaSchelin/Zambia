@@ -118,4 +118,3 @@ if ($status == false) {
 }
 require('renderMySchedConstr.php');
 exit();
-?>

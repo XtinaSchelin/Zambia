@@ -5,23 +5,24 @@ require_once('BrainstormCommonCode.php');
 $title = "Scheduled Suggestions";
 $ConStartDatim = CON_START_DATIM;
 $query = <<<EOD
-SELECT
-        S.sessionid, T.trackname, NULL typename, S.title, 
-        concat( if(left(S.duration,2)=00, '', 
-                if(left(S.duration,1)=0, concat(right(left(S.duration,2),1),'hr '), concat(left(S.duration,2),'hr '))),
-                if(date_format(S.duration,'%i')=00, '', 
-                if(left(date_format(S.duration,'%i'),1)=0, concat(right(date_format(S.duration,'%i'),1),'min'), 
-                concat(date_format(S.duration,'%i'),'min')))) Duration,
-        S.estatten, S.progguiddesc, S.persppartinfo, roomname,
-        DATE_FORMAT(ADDTIME('$ConStartDatim',SCH.starttime),'%a %l:%i %p') AS starttime, SS.statusname
-    FROM
-                  Sessions S
-             JOIN Tracks T USING (trackid)
-             JOIN SessionStatuses SS USING (statusid)
-             JOIN Schedule SCH USING (sessionid)
-             JOIN Rooms R USING (roomid)
-    ORDER BY
-        T.trackname, S.title;
+SELECT S.sessionid,
+       T.trackname,
+       NULL typename,
+            S.title,
+            concat(if(left(S.duration, 2)=00, '', if(left(S.duration, 1)=0, concat(right(left(S.duration, 2), 1), 'hr '), concat(left(S.duration, 2), 'hr '))), if(date_format(S.duration, '%i')=00, '', if(left(date_format(S.duration, '%i'), 1)=0, concat(right(date_format(S.duration, '%i'), 1), 'min'), concat(date_format(S.duration, '%i'), 'min')))) Duration,
+            S.estatten,
+            S.progguiddesc,
+            S.persppartinfo,
+            roomname,
+            DATE_FORMAT(ADDTIME('$ConStartDatim', SCH.starttime), '%a %l:%i %p') AS starttime,
+            SS.statusname
+FROM Sessions S
+JOIN Tracks T USING (trackid)
+JOIN SessionStatuses SS USING (statusid)
+JOIN Schedule SCH USING (sessionid)
+JOIN Rooms R USING (roomid)
+ORDER BY T.trackname,
+         S.title;
 EOD;
 brainstorm_header($title);
 $result = mysqli_query_exit_on_error($query);
@@ -32,5 +33,3 @@ echo "This list is sorted by Track and then Title.";
 RenderPrecis($result, false);
 brainstorm_footer();
 exit();
-?> 
-

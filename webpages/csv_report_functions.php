@@ -1,6 +1,7 @@
 <?php
 // Copyright (c) 2018 Peter Olszowka. All rights reserved. See copyright document for more details.
-function render_query_result_as_csv($result) {
+function render_query_result_as_csv($result)
+{
     while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
         $betweenValues = false;
         foreach ($row as $value) {
@@ -21,7 +22,8 @@ function render_query_result_as_csv($result) {
     }
     mysqli_free_result($result);
 }
-function echo_if_zero_rows_and_exit($result) {
+function echo_if_zero_rows_and_exit($result)
+{
     global $title;
     if (mysqli_num_rows($result) == 0) {
         staff_header($title);

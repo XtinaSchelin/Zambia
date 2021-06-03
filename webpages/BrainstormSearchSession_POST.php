@@ -7,23 +7,24 @@ $ConStartDatim = CON_START_DATIM;
 $trackid = getInt("track", 0);
 $titlesearch = isset($_POST["title"]) ? stripslashes($_POST["title"]) : "";
 $query = <<<EOD
-SELECT
-        sessionid, trackname, null typename, title, 
-        CONCAT( IF(LEFT(duration,2)=00, '', 
-                IF(LEFT(duration,1)=0, CONCAT(RIGHT(LEFT(duration,2),1),'hr '), CONCAT(LEFT(duration,2),'hr '))),
-                IF(DATE_FORMAT(duration,'%i')=00, '', 
-                IF(LEFT(DATE_FORMAT(duration,'%i'),1)=0, CONCAT(RIGHT(DATE_FORMAT(duration,'%i'),1),'min'), 
-            CONCAT(DATE_FORMAT(duration,'%i'),'min')))) Duration,
-        estatten, progguiddesc, persppartinfo, roomname,
-		DATE_FORMAT(ADDTIME('$ConStartDatim',SCH.starttime),'%a %l:%i %p') AS starttime, SS.statusname
-    FROM
-    	          Sessions S
-    	     JOIN Tracks TR USING (trackid)
-    	     JOIN SessionStatuses SS USING (statusid)
-		LEFT JOIN Schedule SCH USING (sessionid)
-		LEFT JOIN Rooms R USING (roomid)
-    WHERE
-            SS.statusname IN ('Edit Me','Brainstorm','Vetted','Assigned','Scheduled')
+SELECT sessionid,
+       trackname,
+       null typename,
+       title, 
+       CONCAT(IF(LEFT(duration, 2)=00, '', IF(LEFT(duration, 1)=0, CONCAT(RIGHT(LEFT(duration, 2), 1), 'hr '), CONCAT(LEFT(duration, 2), 'hr '))), IF(DATE_FORMAT(duration, '%i')=00, '', IF(LEFT(DATE_FORMAT(duration, '%i'), 1)=0, CONCAT(RIGHT(DATE_FORMAT(duration, '%i'), 1), 'min'), CONCAT(DATE_FORMAT(duration, '%i'), 'min')))) Duration,
+       estatten,
+       progguiddesc,
+       persppartinfo,
+       roomname,
+	   DATE_FORMAT(ADDTIME('$ConStartDatim',SCH.starttime),'%a %l:%i %p') AS starttime,
+       SS.statusname
+FROM Sessions S
+JOIN Tracks TR USING (trackid)
+JOIN SessionStatuses SS USING (statusid)
+LEFT JOIN Schedule SCH USING (sessionid)
+LEFT JOIN Rooms R USING (roomid)
+WHERE
+SS.statusname IN ('Edit Me','Brainstorm','Vetted','Assigned','Scheduled')
 EOD;
 if ($trackid != 0) {
     $query .= " and S.trackid=" . $trackid;
@@ -49,4 +50,3 @@ echo "<p>This list is sorted by Track and then Title.</p>";
 RenderPrecis($result, false);
 brainstorm_footer();
 exit();
-?>

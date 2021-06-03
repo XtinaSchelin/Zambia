@@ -7,49 +7,60 @@ var fbadgeid;
 var resultsHidden = true;
 
 function anyChange() {
+	/**
+	 * Check whether any change has been made on a page.
+	 */
 	var x = $("#password").val();
 	var y = $("#cpassword").val();
-	if (!x && !y && ($("#interested").val() != originalInterested || 
-			bioDirty || pnameDirty || snotesDirty) ||
-		(x && x == y) ) {
-			$("#updateBUTN").prop("disabled", false);
-			}
-		else {
-			$("#updateBUTN").prop("disabled", true);
-			}
+	if (!x && !y && ($("#interested").val() != originalInterested ||
+		bioDirty || pnameDirty || snotesDirty) ||
+		(x && x == y)) {
+		$("#updateBUTN").prop("disabled", false);
+	}
+	else {
+		$("#updateBUTN").prop("disabled", true);
+	}
 	var z = $("#passwordsDontMatch");
-	if (x && y && x!=y)
-			z.show();
-		else
-			z.hide();
+	if (x && y && x != y)
+		z.show();
+	else
+		z.hide();
 }
 
 function checkIfDirty(mode) {
-	//called when user clicks "Search for participants" on the page
-	//debugger;
-	if (!mode && (bioDirty || pnameDirty || snotesDirty || 
+	/**
+	 * Called when user clicks "Search for participants" on the page debugger
+	 * @param {String} mode  The mode the search page is currently in.
+	 */
+	if (!mode && (bioDirty || pnameDirty || snotesDirty ||
 		$("#interested").val() != originalInterested ||
-		($("#password").val()) && 
-			$("#cpassword").val())) {
-			$("#unsavedWarningDIV").modal('show');
-			$("#cancelOpenSearchBUTN").blur();
-			return false;	
-			}
+		($("#password").val()) &&
+		$("#cpassword").val())) {
+		$("#unsavedWarningDIV").modal('show');
+		$("#cancelOpenSearchBUTN").blur();
+		return false;
+	}
 	if (mode)
 		$("#unsavedWarningDIV").modal('hide');
-	if (mode=="cancel")
+	if (mode == "cancel")
 		return false;
 	return true;
 }
 
 function chooseParticipant(badgeid, override) {
+	/**
+	 * Selecting the participant and populating various
+	 * visible and hidden fields.
+	 * @param {String} badgeid   The participant's badge ID.
+	 * @param {String} override  What mode the page is in.
+	 */
 	//debugger;
 	if (!checkIfDirty(override)) {
 		$('#warnName').html($("#pname").val());
 		$('#warnNewBadgeID').html(badgeid);
 		return;
-		}
-	var badgeidJQSel = badgeid.replace(/[']/g,"\\'").replace(/["]/g,'\\"');
+	}
+	var badgeidJQSel = badgeid.replace(/[']/g, "\\'").replace(/["]/g, '\\"');
 	hideSearchResults();
 	$("#badgeid").val($("#bidSPAN_" + badgeidJQSel).html());
 	$("#lname_fname").val($("#lnameSPAN_" + badgeidJQSel).html());
@@ -57,7 +68,7 @@ function chooseParticipant(badgeid, override) {
 	var pname = $("#pnameSPAN_" + badgeidJQSel).html();
 	$("#pname").val(pname).prop("defaultValue", pname).prop("readOnly", false);
 	originalInterested = $("#interestedHID_" + badgeidJQSel).val();
-	if (originalInterested=="")
+	if (originalInterested == "")
 		originalInterested = 0;
 	$("#interested").val(originalInterested);
 	$("#interested").prop("disabled", false);
@@ -77,9 +88,11 @@ function chooseParticipant(badgeid, override) {
 }
 
 function doSearchPartsBUTN() {
+	/**
+	 * Called when user clicks "Search" within a dialog.
+	 */
 	if (!checkIfDirty())
 		return;
-	//called when user clicks "Search" within dialog
 	var x = document.getElementById("searchPartsINPUT").value;
 	if (!x)
 		return;
@@ -88,36 +101,40 @@ function doSearchPartsBUTN() {
 		url: "SubmitAdminParticipants.php",
 		dataType: "html",
 		data: ({
-			searchString : x,
-			ajax_request_action : "perform_search"
-			}),
+			searchString: x,
+			ajax_request_action: "perform_search"
+		}),
 		success: writeSearchResults,
 		type: "POST"
-		});
+	});
 }
 
 function fetchParticipant(badgeid) {
+	/**
+	 * Retrieve the specified participant.
+	 * @param {String} badgeid  The participant's badge ID.
+	 */
 	$.ajax({
 		url: "SubmitAdminParticipants.php",
 		dataType: "xml",
 		data: ({
-			badgeid : badgeid,
-			ajax_request_action : "fetch_participant"
-			}),
+			badgeid: badgeid,
+			ajax_request_action: "fetch_participant"
+		}),
 		success: fetchParticipantCallback,
 		type: "GET"
-		});
+	});
 }
 
 function fetchParticipantCallback(data, textStatus, jqXHR) {
 	//debugger;
-	var node=data.firstChild.firstChild.firstChild;
+	var node = data.firstChild.firstChild.firstChild;
 	$("#badgeid").val(node.getAttribute("badgeid"));
-	$("#lname_fname").val(node.getAttribute("lastname")+", "+node.getAttribute("firstname"));
+	$("#lname_fname").val(node.getAttribute("lastname") + ", " + node.getAttribute("firstname"));
 	$("#bname").val(node.getAttribute("badgename"));
 	$("#pname").val(node.getAttribute("pubsname")).prop("defaultValue", node.getAttribute("pubsname")).prop("readOnly", false);
 	originalInterested = node.getAttribute("interested");
-	if (originalInterested=="")
+	if (originalInterested == "")
 		originalInterested = 0;
 	$("#interested").val(originalInterested);
 	$("#interested").prop("disabled", false);
@@ -132,12 +149,15 @@ function fetchParticipantCallback(data, textStatus, jqXHR) {
 	snotesDirty = false;
 	$('#resultsDiv').show();
 	$('#resultBoxDIV').show();
-	$("#updateBUTN").prop("disabled", true);	
+	$("#updateBUTN").prop("disabled", true);
 	$("#passwordsDontMatch").hide();
 	hideSearchResults();
 }
 
 function hideSearchResults() {
+	/**
+	 * Hide search results and change the button text.
+	 */
 	resultsHidden = true;
 	$("#searchResultsDIV").hide("fast");
 	$("#toggleSearchResultsBUTN").prop("disabled", false);
@@ -145,12 +165,14 @@ function hideSearchResults() {
 }
 
 function initializeAdminParticipants() {
-	//called when JQuery says AdminParticipants page has loaded
-	//debugger;
+	/**
+	 * Called when JQuery says the AdminParticipants page has loaded.
+	 */
+	// debugger;
 	$("#passwordsDontMatch").hide();
 	$('#resultsDiv').hide();
 	$('#resultBoxDIV').hide();
-	$("#unsavedWarningDIV").modal({backdrop: 'static', keyboard: true, show: false});
+	$("#unsavedWarningDIV").modal({ backdrop: 'static', keyboard: true, show: false });
 	$("#toggleSearchResultsBUTN").click(toggleSearchResultsBUTN);
 	$("#toggleSearchResultsBUTN").prop("disabled", true);
 	resultsHidden = true;
@@ -159,18 +181,24 @@ function initializeAdminParticipants() {
 	$("#overrideOpenSearchBUTN").button();
 	$("#searchResultsDIV").html("").hide('fast');
 	if (fbadgeid)  // signal from page initializer that page was requested to
-					       // to be preloaded with a participant
+		// to be preloaded with a participant
 		fetchParticipant(fbadgeid);
 }
 
 function loadNewParticipant() {
+	/**
+	 * TODO Find what this does.
+	 */
 	var id = $('#warnNewBadgeID').html();
 	chooseParticipant(id, 'override');
 	return true;
 }
 
 function showSearchResults() {
-	resultsHidden = false;
+	/**
+	 * Show search results and change the button text.
+	 */
+	 resultsHidden = false;
 	$("#searchResultsDIV").show("fast");
 	$("#toggleSearchResultsBUTN").prop("disabled", false);
 	$("#toggleText").html("Hide");
@@ -185,13 +213,13 @@ function showUpdateResults(data, textStatus, jqXHR) {
 	$("#cpassword").val("");
 	$('#updateBUTN').button('reset');
 	originalInterested = $("#interested").val();
-	setTimeout(function() {$("#updateBUTN").button().attr("disabled","disabled");}, 0);
+	setTimeout(function () { $("#updateBUTN").button().attr("disabled", "disabled"); }, 0);
 	$("#resultBoxDIV").html(data);
 	$('#resultBoxDIV').show();
 }
 
 function textChange(which) {
-	switch(which) {
+	switch (which) {
 		case 'bio':
 			bioDirty = ($("#bio").val() != $("#bio").prop("defaultValue"));
 			break;
@@ -201,7 +229,7 @@ function textChange(which) {
 		case 'pname':
 			pnameDirty = ($("#pname").val() != $("#pname").prop("defaultValue"));
 			break;
-		}
+	}
 	anyChange();
 }
 
@@ -215,9 +243,9 @@ function updateBUTN() {
 	//debugger;
 	$('#updateBUTN').button('loading');
 	var postdata = {
-		ajax_request_action : "update_participant",
-		badgeid : $("#badgeid").val()
-		};
+		ajax_request_action: "update_participant",
+		badgeid: $("#badgeid").val()
+	};
 	if (x = $("#password").val())
 		postdata.password = x;
 	if (bioDirty)
@@ -234,7 +262,7 @@ function updateBUTN() {
 		data: postdata,
 		success: showUpdateResults,
 		type: "POST"
-		});
+	});
 }
 
 function writeSearchResults(data, textStatus, jqXHR) {
@@ -243,4 +271,3 @@ function writeSearchResults(data, textStatus, jqXHR) {
 	$('#searchPartsBUTN').button('reset');
 	showSearchResults();
 }
-

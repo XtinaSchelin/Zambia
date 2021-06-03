@@ -5,28 +5,32 @@ require_once('BrainstormCommonCode.php');
 $ConStartDatim = CON_START_DATIM;
 $title = "All Suggestions";
 $query = <<<EOD
-SELECT
-        S.sessionid, T.trackname, NULL typename, S.title, 
-        concat( if(left(S.duration,2)=00, '', 
-                if(left(S.duration,1)=0, concat(right(left(S.duration,2),1),'hr '), concat(left(S.duration,2),'hr '))),
-                if(date_format(S.duration,'%i')=00, '', 
-                if(left(date_format(S.duration,'%i'),1)=0, concat(right(date_format(S.duration,'%i'),1),'min'), 
-                concat(date_format(S.duration,'%i'),'min')))) Duration,
-        S.estatten, S.progguiddesc, S.persppartinfo, roomname,
-		DATE_FORMAT(ADDTIME('$ConStartDatim',SCH.starttime),'%a %l:%i %p') AS starttime, SS.statusname
-    FROM
-             Sessions S
-        JOIN Tracks T USING (trackid)
-        JOIN SessionStatuses SS USING (statusid)
-        LEFT JOIN Schedule SCH USING (sessionid)
-        LEFT JOIN Rooms R USING (roomid)
-    WHERE
-            SS.statusname IN ('Edit Me','Brainstorm','Vetted','Assigned','Scheduled')
-    ORDER BY
-        T.trackname, S.title;
+SELECT S.sessionid,
+       T.trackname,
+       NULL typename,
+            S.title,
+            CONCAT(IF(LEFT(S.duration, 2) = 00, '', IF(LEFT(S.duration, 1) = 0, CONCAT(RIGHT(LEFT(S.duration, 2), 1), 'hr '), CONCAT(lEFT(S.duration, 2), 'hr '))), IF(date_format(S.duration, '%i')=00, '', IF(LEFT(date_format(S.duration, '%i'), 1)=0, CONCAT(RIGHT(date_format(S.duration, '%i'), 1), 'min'), CONCAT(date_format(S.duration, '%i'), 'min')))) Duration,
+            S.estatten,
+            S.progguiddesc,
+            S.persppartinfo,
+            roomname,
+            DATE_FORMAT(ADDTIME('$ConStartDatim', SCH.starttime), '%a %l:%i %p') AS starttime,
+            SS.statusname
+FROM Sessions S
+JOIN Tracks T USING (trackid)
+JOIN SessionStatuses SS USING (statusid)
+LEFT JOIN Schedule SCH USING (sessionid)
+LEFT JOIN Rooms R USING (roomid)
+WHERE SS.statusname IN ('Edit Me',
+                        'Brainstorm',
+                        'Vetted',
+                        'Assigned',
+                        'Scheduled')
+ORDER BY T.trackname,
+         S.title;
 EOD;
 if (($result = mysqli_query_exit_on_error($query)) === false) {
-    exit(); // Should have exited already
+        exit(); // Should have exited already
 }
 brainstorm_header($title);
 echo "<p> This list includes ALL ideas that have been submitted.   Some may require Peril Sensitive Sunglasses.</p>";
@@ -37,5 +41,3 @@ echo "This list is sorted by Track and then Title.";
 RenderPrecis($result, false);
 brainstorm_footer();
 exit();
-?> 
-

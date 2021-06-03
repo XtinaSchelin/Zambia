@@ -63,4 +63,3 @@ if (md5($password) != $dbpassword) {
 }
 require('ParticipantHome.php');
 exit();
-?>

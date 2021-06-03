@@ -11,7 +11,7 @@ if ($reportName == '') {
 }
 require("reports/$reportName");
 foreach ($report['queries'] as $queryName => $query) {
-    $report['queries'][$queryName] = str_replace('$ConStartDatim$',CON_START_DATIM, $query);
+    $report['queries'][$queryName] = str_replace('$ConStartDatim$', CON_START_DATIM, $query);
 }
 if (isset($report['csv_output']) && $report['csv_output'] == true) {
     if (isset($report['group_concat_expand']) && $report['group_concat_expand'] == true) {
@@ -29,7 +29,7 @@ if (isset($report['csv_output']) && $report['csv_output'] == true) {
     echo_if_zero_rows_and_exit($result);
     header("Content-disposition: attachment; filename={$report['output_filename']}");
     header('Content-type: text/csv');
-    echo $report['column_headings']."\n";
+    echo $report['column_headings'] . "\n";
     render_query_result_as_csv($result);
 } else {
     if (($resultXML = mysql_query_XML($report['queries'])) === false) {
@@ -55,8 +55,7 @@ if (isset($report['csv_output']) && $report['csv_output'] == true) {
     }
     $html = $xslt->transformToXML($resultXML);
     // some browsers do not support empty div, iframe, script and textarea tags
-    echo(mb_ereg_replace("<(div|iframe|script|textarea)([^>]*/[ ]*)>", "<\\1\\2></\\1>", $html, "i"));
+    echo (mb_ereg_replace("<(div|iframe|script|textarea)([^>]*/[ ]*)>", "<\\1\\2></\\1>", $html, "i"));
     // echo "<div pbo=\"{$report['columns']}\"></div>\n";
     staff_footer();
 }
-?>

@@ -7,7 +7,7 @@ $report['categories'] = array(
     'Programming Reports' => 60,
 );
 $report['queries'] = [];
-$report['queries']['schedule'] =<<<'EOD'
+$report['queries']['schedule'] = <<<'EOD'
 SELECT
         DATE_FORMAT(ADDTIME('$ConStartDatim$',SCH.starttime),'%a %l:%i %p') as starttime,
         DATE_FORMAT(S.duration,'%i') as durationmin,
@@ -26,7 +26,7 @@ SELECT
     ORDER BY
         SCH.starttime, T.trackname;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

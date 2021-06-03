@@ -4,7 +4,8 @@
 	Created by Peter Olszowka on 2011-10-15.
 	Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:variable name="interested" select="/doc/query[@queryName='interested']/row/@interested='1'"/>
     <xsl:variable name="mayISubmitPanelInterests" select="/doc/variables/@may_I='1' and $interested"/>
@@ -15,7 +16,8 @@
             <div class="alert alert-block" style="margin:15px 0;">
                 <h4>Warning!</h4>
                 <span>
-                    You have not indicated in your profile that you will be attending <xsl:value-of select="$conName"/>.
+                    You have not indicated in your profile that you will be attending <xsl:value-of select="$conName"/>
+.
                     You will not be able to save your panel choices until you so do.
                 </span>
             </div>
@@ -71,15 +73,15 @@
         <xsl:if test="$mayISubmitPanelInterests">
             <tr>
                 <td colspan="3" sessionid="{@sessionid}">
-                    <label class="checkbox"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>Add this
+                    <label class="checkbox">
+                        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>Add this
                         session to my list
                         <input type="checkbox" value="{@sessionid}" name="int{@sessionid}" id="int{@sessionid}">
                             <xsl:if test="@badgeid">
                                 <xsl:attribute name="checked">checked</xsl:attribute>
                             </xsl:if>
                         </input>
-                        <input type="hidden" value="{@sessionid}" name="dirty{@sessionid}" id="dirty{@sessionid}"
-                               disabled="disabled"/>
+                        <input type="hidden" value="{@sessionid}" name="dirty{@sessionid}" id="dirty{@sessionid}" disabled="disabled"/>
                     </label>
                 </td>
             </tr>

@@ -7,7 +7,7 @@ $report['categories'] = array(
     'Programming Reports' => 140,
 );
 $report['queries'] = [];
-$report['queries']['sessions'] =<<<'EOD'
+$report['queries']['sessions'] = <<<'EOD'
 SELECT
         T.trackname,
         S.sessionid,
@@ -26,7 +26,7 @@ SELECT
     ORDER BY
         Trackname, S.sessionid;
 EOD;
-$report['queries']['participants'] =<<<'EOD'
+$report['queries']['participants'] = <<<'EOD'
 SELECT
         S.sessionid,
         P.pubsname,
@@ -41,7 +41,7 @@ SELECT
         POS.moderator DESC,
         P.pubsname;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

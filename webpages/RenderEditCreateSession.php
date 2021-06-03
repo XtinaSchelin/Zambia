@@ -38,7 +38,7 @@ function RenderEditCreateSession($action, $session, $message1, $message2)
       <INPUT type="hidden" name="name" value="<?php echo htmlspecialchars($name, ENT_COMPAT); ?>">
       <INPUT type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_COMPAT); ?>">
       <!-- The pubno field is no longer used on the form, but the code expects it.-->
-      <INPUT type="hidden" name="pubno" value="<?php echo htmlspecialchars($session["pubno"], ENT_COMPAT) . "\">"; ?>
+      <INPUT type="hidden" name="pubno" value="<?php echo htmlspecialchars($session["pubno"], ENT_COMPAT) ?>">
           <div id=" buttonBox" class="clearfix">
       <div class="pull-right">
         <BUTTON class="btn" type=reset value="reset">Reset</BUTTON>
@@ -82,23 +82,8 @@ function RenderEditCreateSession($action, $session, $message1, $message2)
       <SELECT name="kids" class="span6"><?php populate_select_from_table("KidsCategories", $session["kids"], "SELECT", FALSE); ?></SELECT>
     </LABEL>
   </DIV>
-  <?php
-  if (BILINGUAL === TRUE) {
-    echo "            <DIV class=\"span12\">\n";
-    echo "                 <LABEL for=\"secondtitle\">" . SECOND_TITLE_CAPTION . ": </LABEL>";
-    echo "<INPUT type=text size=\"50\" class=\"span4\" name=\"secondtitle\" value=\"" . htmlspecialchars($session["secondtitle"], ENT_COMPAT) . "\">\n";
-    echo "                 <LABEL for=\"languagestatusid\">Session Language: </LABEL>";
-    echo "<SELECT class=\"span2\" name=\"languagestatusid\">";
-    populate_select_from_table("LanguageStatuses", $session["languagestatusid"], "SELECT", FALSE);
-    echo "</SELECT>\n";
-    echo "            </DIV>\n";
-  } else {
-    echo "            <INPUT type=\"hidden\" name=\"secondtitle\" value=\"";
-    echo htmlspecialchars($session["secondtitle"], ENT_COMPAT) . "\">";
-    echo "            <INPUT type=\"hidden\" name=\"languagestatusid\" value=\"";
-    echo htmlspecialchars($session["languagestatusid"], ENT_COMPAT) . "\">";
-  }
-  ?>
+  <INPUT type="hidden" name="secondtitle" value="<?php htmlspecialchars($session["secondtitle"], ENT_COMPAT) ?>">
+  <INPUT type="hidden" name="languagestatusid" value="<?php htmlspecialchars($session["languagestatusid"], ENT_COMPAT) ?>">
   <!-- The pocketprogtext field is no longer used on the form, but the code expects it.-->
   <INPUT type="hidden" name="pocketprogtext" value="<?php echo htmlspecialchars($session["pocketprogtext"], ENT_COMPAT) . "\">"; ?>
           <DIV class=" row-fluid clearfix">
@@ -117,19 +102,7 @@ function RenderEditCreateSession($action, $session, $message1, $message2)
     <div class="span6">
       <LABEL class="control-label dense" for="progguiddesc">Description:</LABEL>
       <TEXTAREA class="span12 textlabelarea" cols=70 name="progguiddesc"><?php echo htmlspecialchars($session["progguiddesc"], ENT_NOQUOTES); ?></TEXTAREA>
-      <?php
-      if (BILINGUAL === TRUE) {
-        echo "<LABEL class=\"control-label dense\" for=\"pocketprogtext\">";
-        echo SECOND_DESCRIPTION_CAPTION . ": </LABEL>\n";
-        echo "<TEXTAREA class=\"textlabelarea\" cols=70 name=\"pocketprogtext\">";
-        echo htmlspecialchars($session["pocketprogtext"], ENT_NOQUOTES) . "</TEXTAREA>\n";
-      } else {
-        echo "                <!-- The pocketprogtext field is no longer used on the form, but the code expects it.-->\n";
-        echo "                <INPUT type=\"hidden\" name=\"pocketprogtext\" value=\"";
-        echo htmlspecialchars($session["pocketprogtext"], ENT_COMPAT) . "\">\n";
-      }
-      ?>
-    </div>
+      <INPUT type="hidden" name="pocketprogtext" value="<?php echo htmlspecialchars($session["progguiddesc"], ENT_NOQUOTES); ?>">
     <div class="span6">
       <LABEL class="dense" for="persppartinfo">Prospective Participant Info:</LABEL>
       <TEXTAREA class="span12 textlabelarea" cols=70 name="persppartinfo"><?php echo htmlspecialchars($session["persppartinfo"], ENT_NOQUOTES); ?></TEXTAREA>

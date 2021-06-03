@@ -107,6 +107,7 @@ EOD;
     }
     $oldbadgeid = "";
     $participantAvailabilityTimes = array();
+    $i = 0;
     while (list($badgeid, $startmin, $endmin) = mysqli_fetch_array($result, MYSQLI_NUM)) {
         if ($oldbadgeid != $badgeid) {
             $oldbadgeid = $badgeid;

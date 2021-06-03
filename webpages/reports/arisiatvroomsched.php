@@ -7,7 +7,7 @@ $report['categories'] = array(
     'Arisia TV Reports' => 250,
 );
 $report['queries'] = [];
-$report['queries']['schedule'] =<<<'EOD'
+$report['queries']['schedule'] = <<<'EOD'
 SELECT
         DATE_FORMAT(ADDTIME('$ConStartDatim$',SCH.starttime),'%a %l:%i %p') as starttime,
         DATE_FORMAT(S.duration,'%k:%i') as duration, TY.typename, S.sessionid, S.title, S.progguiddesc
@@ -21,7 +21,7 @@ SELECT
     ORDER BY
         SCH.starttime;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

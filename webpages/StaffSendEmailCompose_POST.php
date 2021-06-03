@@ -12,6 +12,7 @@ if (!isset($_POST['sendto'])) { // page has not been visited before
     StaffRenderErrorPage($title, $message_error);
     exit(0);
 }
+// FIXME This appears to be where $email gets set to be string[] instead of string.
 $email = get_email_from_post();
 if (!validate_email($email)) {
     render_send_email($email, $message); // $message came from validate_email

@@ -198,7 +198,7 @@ function showSearchResults() {
 	/**
 	 * Show search results and change the button text.
 	 */
-	 resultsHidden = false;
+	resultsHidden = false;
 	$("#searchResultsDIV").show("fast");
 	$("#toggleSearchResultsBUTN").prop("disabled", false);
 	$("#toggleText").html("Hide");

@@ -3,7 +3,8 @@
 	Created by Peter Olszowka on 2015-10-16;
 	Copyright (c) 2011-2019 The Peter Olszowka. All rights reserved. See copyright document for more details.
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output encoding="UTF-8" indent="yes" method="html" />
 	<xsl:template match="/">
 		<xsl:variable name="editSessionNotes" select="doc/parameters/@editSessionNotes = 'true'" />
@@ -18,7 +19,9 @@
 				<div class="row-fluid stAsPa-sesInfRow">
 					<div class="span12">
 						<span class="label">Program Guide Text:</span>
-						<span><xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@progguiddesc" /></span>
+						<span>
+							<xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@progguiddesc" />
+						</span>
 					</div>
 				</div>
 			</xsl:if>
@@ -26,7 +29,9 @@
 				<div class="row-fluid stAsPa-sesInfRow">
 					<div class="span12">
 						<span class="label">Prospective Participant Info:</span>
-						<span><xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@persppartinfo" /></span>
+						<span>
+							<xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@persppartinfo" />
+						</span>
 					</div>
 				</div>
 			</xsl:if>
@@ -34,7 +39,9 @@
 				<div class="row-fluid stAsPa-sesInfRow">
 					<div class="span12">
 						<span class="label">Notes for Participant:</span>
-						<span><xsl:value-of select="/doc/query[@queryName='sessionInfo']/row/@notesforpart" /></span>
+						<span>
+							<xsl:value-of select="/doc/query[@queryName='sessionInfo']/row/@notesforpart" />
+						</span>
 					</div>
 				</div>
 			</xsl:if>
@@ -45,7 +52,9 @@
 						<xsl:if test="$editSessionNotes">
 							<button type="button" id="editNPS_BUT" class="btn btn-mini">Edit</button>
 						</xsl:if>
-						<span id="NPS_SPN"><xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@notesforprog" /></span>
+						<span id="NPS_SPN">
+							<xsl:value-of select="doc/query[@queryName='sessionInfo']/row/@notesforprog" />
+						</span>
 					</div>
 				</div>
 			</xsl:if>
@@ -81,7 +90,7 @@
 					<span id="popover-target"></span>
 					<select id="partDropdown" name="asgnpart">
 						<option value="" selected="selected">Assign Participant</option>
-						<xsl:apply-templates select="doc/query[@queryName='otherParticipants']/row" >
+						<xsl:apply-templates select="doc/query[@queryName='otherParticipants']/row">
 							<xsl:sort select="@sortableNameLc" />
 						</xsl:apply-templates>
 					</select>
@@ -92,28 +101,36 @@
 		</form>
 	</xsl:template>
 	<xsl:template match="doc/query[@queryName='participantInterest']/row">
-        <xsl:if test="preceding-sibling::*[1]/@attending='1' and @attending='0'">
-            <div class="not-attending-header-row">Not Attending</div>
-        </xsl:if>
+		<xsl:if test="preceding-sibling::*[1]/@attending='1' and @attending='0'">
+			<div class="not-attending-header-row">Not Attending</div>
+		</xsl:if>
 		<div>
-            <xsl:attribute name="class">
-                <xsl:text>row-container</xsl:text><xsl:if test="@attending='0'"><xsl:text> not-attending</xsl:text></xsl:if>
-            </xsl:attribute>
+			<xsl:attribute name="class">
+				<xsl:text>row-container</xsl:text>
+				<xsl:if test="@attending='0'">
+					<xsl:text> not-attending</xsl:text>
+				</xsl:if>
+			</xsl:attribute>
 			<div>
 				<xsl:choose>
-					<xsl:when test="@moderator='1'"><xsl:attribute name="class">row-fluid success-bg</xsl:attribute></xsl:when>
-					<xsl:otherwise><xsl:attribute name="class">row-fluid</xsl:attribute></xsl:otherwise>
+					<xsl:when test="@moderator='1'">
+						<xsl:attribute name="class">row-fluid success-bg</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="class">row-fluid</xsl:attribute>
+					</xsl:otherwise>
 				</xsl:choose>
-                <div>
-                    <xsl:attribute name="class">
-                        <xsl:text>span2</xsl:text>
-                        <xsl:if test="@attending='0'">
-                            <xsl:text> problem-bg</xsl:text>
-                        </xsl:if>
-                    </xsl:attribute>
+				<div>
+					<xsl:attribute name="class">
+						<xsl:text>span2</xsl:text>
+						<xsl:if test="@attending='0'">
+							<xsl:text> problem-bg</xsl:text>
+						</xsl:if>
+					</xsl:attribute>
 					<label class="checkbox">
 						<input type="checkbox" value="1">
-							<xsl:attribute name="name">asgn<xsl:value-of select="@badgeid" /></xsl:attribute>
+							<xsl:attribute name="name">asgn<xsl:value-of select="@badgeid" />
+							</xsl:attribute>
 							<xsl:if test="@posbadgeid">
 								<xsl:attribute name="checked">checked</xsl:attribute>
 							</xsl:if>
@@ -123,12 +140,18 @@
 					<input type="hidden" name="row{position()}" value="{@badgeid}" />
 					<input type="hidden" name="wasasgn{@badgeid}">
 						<xsl:choose>
-							<xsl:when test="@posbadgeid"><xsl:attribute name="value">1</xsl:attribute></xsl:when>
-							<xsl:otherwise><xsl:attribute name="value">0</xsl:attribute></xsl:otherwise>
+							<xsl:when test="@posbadgeid">
+								<xsl:attribute name="value">1</xsl:attribute>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:attribute name="value">0</xsl:attribute>
+							</xsl:otherwise>
 						</xsl:choose>
-					</input>									   
+					</input>
 				</div>
-				<div class="span1"><xsl:value-of select="@badgeid" /></div>
+				<div class="span1">
+					<xsl:value-of select="@badgeid" />
+				</div>
 				<div class="span4">
 					<xsl:value-of select="@pubsname" />
 					<xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;&amp;nbsp;</xsl:text>
@@ -137,8 +160,12 @@
 				<div class="span2">
 					<xsl:text>Rank: </xsl:text>
 					<xsl:choose>
-						<xsl:when test="@rank='99'"><xsl:text>None</xsl:text></xsl:when>
-						<xsl:otherwise><xsl:value-of select="@rank" /></xsl:otherwise>
+						<xsl:when test="@rank='99'">
+							<xsl:text>None</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@rank" />
+						</xsl:otherwise>
 					</xsl:choose>
 				</div>
 				<div class="span3">
@@ -155,22 +182,28 @@
 							<xsl:attribute name="title">Volunteered to moderate in general, but not this panel in particular</xsl:attribute>
 							<xsl:text>Mod any</xsl:text>
 						</xsl:when>
-						<xsl:otherwise><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></xsl:otherwise>
+						<xsl:otherwise>
+							<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+						</xsl:otherwise>
 					</xsl:choose>
 				</div>
 			</div>
 			<div>
 				<xsl:choose>
-					<xsl:when test="@moderator='1'"><xsl:attribute name="class">row-fluid success-bg</xsl:attribute></xsl:when>
-					<xsl:otherwise><xsl:attribute name="class">row-fluid</xsl:attribute></xsl:otherwise>
+					<xsl:when test="@moderator='1'">
+						<xsl:attribute name="class">row-fluid success-bg</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="class">row-fluid</xsl:attribute>
+					</xsl:otherwise>
 				</xsl:choose>
 				<div>
-                    <xsl:attribute name="class">
-                        <xsl:text>span2</xsl:text>
-                        <xsl:if test="@attending='0'">
-                            <xsl:text> problem-bg</xsl:text>
-                        </xsl:if>
-                    </xsl:attribute>
+					<xsl:attribute name="class">
+						<xsl:text>span2</xsl:text>
+						<xsl:if test="@attending='0'">
+							<xsl:text> problem-bg</xsl:text>
+						</xsl:if>
+					</xsl:attribute>
 					<label class="radio">
 						<input type="radio" name="moderator" id="moderator-{position()}" value="{@badgeid}">
 							<xsl:if test="@moderator='1'">
@@ -182,27 +215,41 @@
 				</div>
 				<div>
 					<xsl:choose>
-						<xsl:when test="@moderator='1'"><xsl:attribute name="class">span10</xsl:attribute></xsl:when>
-						<xsl:otherwise><xsl:attribute name="class">span10 info-bg</xsl:attribute></xsl:otherwise>
+						<xsl:when test="@moderator='1'">
+							<xsl:attribute name="class">span10</xsl:attribute>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:attribute name="class">span10 info-bg</xsl:attribute>
+						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:value-of select="@comments"/>
-				</div>	
+				</div>
 			</div>
 			<xsl:if test="@staff_notes">
 				<div>
 					<xsl:choose>
-                        <xsl:when test="@attending='0'"><xsl:attribute name="class">row-fluid problem-bg</xsl:attribute></xsl:when>
-						<xsl:when test="@moderator='1'"><xsl:attribute name="class">row-fluid success-bg</xsl:attribute></xsl:when>
-						<xsl:otherwise><xsl:attribute name="class">row-fluid</xsl:attribute></xsl:otherwise>
+						<xsl:when test="@attending='0'">
+							<xsl:attribute name="class">row-fluid problem-bg</xsl:attribute>
+						</xsl:when>
+						<xsl:when test="@moderator='1'">
+							<xsl:attribute name="class">row-fluid success-bg</xsl:attribute>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:attribute name="class">row-fluid</xsl:attribute>
+						</xsl:otherwise>
 					</xsl:choose>
 					<div class="span10 offset2 warning-bg">
 						<xsl:value-of select="@staff_notes"/>
-					</div>	
+					</div>
 				</div>
 			</xsl:if>
 		</div>
 	</xsl:template>
 	<xsl:template match="doc/query[@queryName='otherParticipants']/row">
-		<option value="{@badgeid}"><xsl:value-of select="@sortableName" /><xsl:text> - </xsl:text><xsl:value-of select="@badgeid" /></option>
+		<option value="{@badgeid}">
+			<xsl:value-of select="@sortableName" />
+			<xsl:text> - </xsl:text>
+			<xsl:value-of select="@badgeid" />
+		</option>
 	</xsl:template>
 </xsl:stylesheet>

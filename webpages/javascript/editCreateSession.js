@@ -20,7 +20,7 @@ function fdropitems(source, dest) {
     /**
      * TODO Find what this does.
      */
-     var i;
+    var i;
     var itemtext;
     var itemvalue;
     for (i = 0; i < dest.length; i++) {
@@ -38,7 +38,7 @@ function mysubmit() {
     /**
      * TODO Find what this does.
      */
-     $("#sessionid").prop("disabled", false);
+    $("#sessionid").prop("disabled", false);
     var i;
     for (i = 0; i < document.sessform.featdest.length; i++) {
         document.sessform.featdest.options[i].selected = true;

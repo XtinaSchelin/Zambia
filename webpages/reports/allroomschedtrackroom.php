@@ -9,7 +9,7 @@ $report['categories'] = array(
     'GOH Reports' => 40,
 );
 $report['queries'] = [];
-$report['queries']['schedule'] =<<<'EOD'
+$report['queries']['schedule'] = <<<'EOD'
 SELECT
         DATE_FORMAT(S.duration,'%i') as durationmin, DATE_FORMAT(S.duration,'%k') as durationhrs,
 	R.roomid, R.roomname, R.function, TR.trackname, S.sessionid, S.title, PS.pubstatusname, 
@@ -23,7 +23,7 @@ SELECT
     ORDER BY
         TR.trackname, R.roomname, SCH.starttime;
 EOD;
-$report['queries']['participants'] =<<<'EOD'
+$report['queries']['participants'] = <<<'EOD'
 SELECT
         SCH.sessionid, P.pubsname, P.badgeid, POS.moderator
     FROM
@@ -36,7 +36,7 @@ SELECT
         IF(instr(P.pubsname,C.lastname)>0,C.lastname,substring_index(P.pubsname,' ',-1)),
         C.firstname;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

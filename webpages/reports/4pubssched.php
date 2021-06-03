@@ -7,7 +7,7 @@ $report['categories'] = array(
     'Publication Reports' => 15,
 );
 $report['queries'] = [];
-$report['queries']['sessions'] =<<<'EOD'
+$report['queries']['sessions'] = <<<'EOD'
 SELECT
         S.sessionid, S.title, R.roomname, SCH.roomid, PS.pubstatusname, T.trackname,
         DATE_FORMAT(ADDTIME('$ConStartDatim$',SCH.starttime),'%a %l:%i %p') AS starttime,
@@ -23,7 +23,7 @@ SELECT
     ORDER BY
         SCH.starttime, R.roomname;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

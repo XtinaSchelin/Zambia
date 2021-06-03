@@ -8,7 +8,7 @@ $report['categories'] = array(
     'Programming Reports' => 145,
 );
 $report['queries'] = [];
-$report['queries']['schedule'] =<<<'EOD'
+$report['queries']['schedule'] = <<<'EOD'
 SELECT
         R.roomid, R.roomname, TR.trackname, S.sessionid, S.title, SS.statusname, P.pubsname,
         POS.badgeid, TY.typename, DATE_FORMAT(S.duration,'%i') AS durationmin,
@@ -28,7 +28,7 @@ SELECT
     ORDER BY
         TR.trackname, S.sessionid;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

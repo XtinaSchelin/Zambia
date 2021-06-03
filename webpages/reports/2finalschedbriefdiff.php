@@ -8,7 +8,7 @@ $report['categories'] = array(
     'Publication Reports' => 70,
 );
 $report['queries'] = [];
-$report['queries']['sessions'] =<<<'EOD'
+$report['queries']['sessions'] = <<<'EOD'
 SELECT
         SEH.timestamp, S.sessionid, S.title, T.trackname, SS.statusname, SEC.description, SEH.editdescription,
         SEH.name
@@ -30,7 +30,7 @@ SELECT
     ORDER BY
         T.trackname, S.sessionid;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

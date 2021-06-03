@@ -15,7 +15,7 @@ $report['columns'] = array(
     array("visible" => false)
 );
 $report['queries'] = [];
-$report['queries']['participants'] =<<<'EOD'
+$report['queries']['participants'] = <<<'EOD'
 SELECT
 		CD.badgeid, CD.firstname, CD.lastname, CONCAT(CD.lastname, CD.firstname) AS nameSort, CD.badgename, P.pubsname,
         IF(INSTR(P.pubsname, CD.lastname) > 0, CD.lastname, SUBSTRING_INDEX(P.pubsname, ' ', -1)) AS pubsnameSort
@@ -30,7 +30,7 @@ SELECT
         IF(INSTR(P.pubsname, CD.lastname) > 0, CD.lastname, SUBSTRING_INDEX(P.pubsname, ' ', -1)),
         CD.firstname;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="xml" />

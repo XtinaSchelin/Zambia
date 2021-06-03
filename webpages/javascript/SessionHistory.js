@@ -1,7 +1,7 @@
 //	Created by Peter Olszowka on 2016-05-18;
 //	Copyright (c) 2011-2019 Peter Olszowka. All rights reserved. See copyright document for more details.
 
-var SessionHistory = function() {
+var SessionHistory = function () {
 	this.initialize = function initialize() {
 		//called when page has loaded
 		var $sessionButton = document.getElementById('sessionBtn');
@@ -15,7 +15,7 @@ var SessionHistory = function() {
 				if ($sessionSelect.value === '0') {
 					$sessionButton.disabled = true;
 				}
-				$sessionSelect.addEventListener('change', function() {
+				$sessionSelect.addEventListener('change', function () {
 					$sessionButton.disabled = ($sessionSelect.value === '0');
 				});
 			}

@@ -9,7 +9,7 @@ $report['categories'] = array(
 $report['csv_output'] = true;
 $report['group_concat_expand'] = true;
 $report['queries'] = [];
-$report['queries']['master'] =<<<'EOD'
+$report['queries']['master'] = <<<'EOD'
 SELECT
         POS.badgeid,
         P.pubsname,

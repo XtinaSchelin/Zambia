@@ -1,8 +1,8 @@
 //	Created by Peter Olszowka on 2015-11-21;
 //	Copyright (c) 2015-2019 The Peter Olszowka. All rights reserved. See copyright document for more details.
 
-var StaffAssignParticipants = function() {
-    this.onClickEditNPS = function(event) {
+var StaffAssignParticipants = function () {
+    this.onClickEditNPS = function (event) {
         var $edit_NPS_Button = $("#editNPS_BUT");
         if ($edit_NPS_Button.text() === "Edit") {
             $edit_NPS_Button.text("Cancel");
@@ -18,21 +18,21 @@ var StaffAssignParticipants = function() {
         }
     };
 
-    this.showPopoverCallback = function(data, textStatus, jqXHR) {
+    this.showPopoverCallback = function (data, textStatus, jqXHR) {
         var node = data.firstChild.firstChild.firstChild;
         this.this.bio = node.getAttribute("bio");
         this.this.fname = node.getAttribute("firstname") + " " + node.getAttribute("lastname");
 
         $('#BioBtn').button('reset');
-        setTimeout(function() {
-                $("#BioBtn").button().prop("disabled", true);
-            },
+        setTimeout(function () {
+            $("#BioBtn").button().prop("disabled", true);
+        },
             0);
 
         this.this.$popoverTarget.popover('show');
     };
 
-    this.showPopover = function(event) {
+    this.showPopover = function (event) {
         // Get the bio for the selected participant
         $('#BioBtn').button('loading');
         var badgeid = $('#partDropdown').val();
@@ -40,8 +40,8 @@ var StaffAssignParticipants = function() {
             url: "SubmitAdminParticipants.php",
             dataType: "xml",
             data: ({
-                badgeid : badgeid,
-                ajax_request_action : "fetch_participant"
+                badgeid: badgeid,
+                ajax_request_action: "fetch_participant"
             }),
             success: this.showPopoverCallback,
             type: "GET",
@@ -51,14 +51,14 @@ var StaffAssignParticipants = function() {
         return false;
     };
 
-    this.onPopoverClose = function() {
+    this.onPopoverClose = function () {
         var $biographyButton = document.getElementById('BioBtn');
         if ($biographyButton) {
             $biographyButton.disabled = false;
         }
     };
 
-    this.initialize = function() {
+    this.initialize = function () {
         var that = this;
         var $biographyButton = document.getElementById('BioBtn');
         if ($biographyButton) {
@@ -83,7 +83,7 @@ var StaffAssignParticipants = function() {
         }
         var $sessionSelect = document.getElementById('sessionDropdown');
         if ($chooseSessionButton && $sessionSelect) {
-            $sessionSelect.addEventListener('change', function() {
+            $sessionSelect.addEventListener('change', function () {
                 $chooseSessionButton.disabled = $sessionSelect.value === '0';
             });
             var sessionSelectChoices = new Choices($sessionSelect, {
@@ -92,7 +92,7 @@ var StaffAssignParticipants = function() {
             });
         }
         this.$popoverTarget = $("#popover-target");
-        $('body').click(function() {
+        $('body').click(function () {
             that.$popoverTarget.popover('hide');
             if ($participantSelect.value !== '') {
                 $biographyButton.disabled = false;
@@ -101,14 +101,14 @@ var StaffAssignParticipants = function() {
         this.$popoverTarget.popover({
             html: true,
             placement: 'top',
-            title: function() {
+            title: function () {
                 return 'Bio for ' + that.fname + "&nbsp;<i id='popoverClose' class='icon-remove-sign pull-right'></i>";
             },
-            content: function() {
+            content: function () {
                 return that.bio;
             }
         });
-        $('#popoverClose').click(function(e) {
+        $('#popoverClose').click(function (e) {
             var $biographyButton = document.getElementById('BioBtn');
             $biographyButton.disabled = false;
             that.$popoverTarget.popover('hide');

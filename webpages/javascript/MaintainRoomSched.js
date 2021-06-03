@@ -1,7 +1,8 @@
 //	Created by Peter Olszowka on 2015-08-30;
 //	Copyright (c) 2015-2019 The Peter Olszowka. All rights reserved. See copyright document for more details.
 
-var MaintainRoomSched = function() {
+// TODO Convert this to a class
+var MaintainRoomSched = function () {
 	this.roomArr = [];
 
 	this.onChangeShowUnscheduledRooms = function () {
@@ -42,7 +43,7 @@ var MaintainRoomSched = function() {
 		this.onChangeShowUnscheduledRooms();
 		var $addToScheduleTable = document.getElementById('add-to-room-schedule-table');
 		if ($addToScheduleTable) {
-			$addToScheduleTable.querySelectorAll('.room-select-td > select').forEach(function(elem) {
+			$addToScheduleTable.querySelectorAll('.room-select-td > select').forEach(function (elem) {
 				new Choices(elem, {
 					searchResultLimit: 9999,
 					searchPlaceholderValue: "Type here to search list."

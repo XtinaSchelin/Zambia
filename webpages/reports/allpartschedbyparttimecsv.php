@@ -4,14 +4,14 @@ $report = [];
 $report['name'] = 'Participant Schedule';
 $report['description'] = 'Export CSV file of full participant schedule by participant, time';
 $report['categories'] = array(
-    'Reports downloadable as CSVs' => 20,
-    'GOH Reports' => 26,
-    'Programming Reports' => 38
+	'Reports downloadable as CSVs' => 20,
+	'GOH Reports' => 26,
+	'Programming Reports' => 38
 );
 $report['csv_output'] = true;
 $report['group_concat_expand'] = false;
 $report['queries'] = [];
-$report['queries']['master'] =<<<'EOD'
+$report['queries']['master'] = <<<'EOD'
 SELECT 
 		IF ((P.pubsname IS NULL), ' ', CONCAT(' ',P.pubsname,' (',P.badgeid,')')) AS 'Participant', 
 		IF ((moderator=1),'moderator', ' ') AS Moderator,

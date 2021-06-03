@@ -2,7 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:template match="/">
         <xsl:variable name="index" select="/doc/variables/@index" />
-        <xsl:variable name="option" select="/doc/variables/@option" /><!-- 'start' or 'end' -->
+        <xsl:variable name="option" select="/doc/variables/@option" />
+        <!-- 'start' or 'end' -->
         <option value="0">
             <xsl:if test="not($index) or $index=0">
                 <xsl:attribute name="selected">selected</xsl:attribute>
@@ -18,7 +19,7 @@
                         <xsl:with-param name="index" select="$index" />
                     </xsl:call-template>
                 </xsl:for-each>
-            </xsl:when>                    
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:for-each select="/doc/query[@queryName='times']/row[@avail_end='1']">
                     <xsl:sort select="@timeid" data-type="number" />

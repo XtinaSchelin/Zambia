@@ -8,7 +8,7 @@ $report['categories'] = array(
     'GOH Reports' => 20,
 );
 $report['queries'] = [];
-$report['queries']['participants'] =<<<'EOD'
+$report['queries']['participants'] = <<<'EOD'
 SELECT DISTINCT
         P.badgeid
     FROM
@@ -24,7 +24,7 @@ SELECT DISTINCT
         IF(instr(P.pubsname,C.lastname)>0,C.lastname,substring_index(P.pubsname,' ',-1)),
         C.firstname;
 EOD;
-$report['queries']['schedule'] =<<<'EOD'
+$report['queries']['schedule'] = <<<'EOD'
 SELECT
         P.pubsname, P.badgeid, POS.moderator, S.duration, R.roomname, R.function, TR.trackname, 
         S.sessionid, S.title, DATE_FORMAT(ADDTIME('$ConStartDatim$',SCH.starttime),'%a %l:%i %p') AS starttime
@@ -41,7 +41,7 @@ SELECT
         C.firstname,
 	SCH.starttime;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

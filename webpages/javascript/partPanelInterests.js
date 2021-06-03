@@ -8,10 +8,10 @@ function PanelInterests() {
 	this.onClickAdd = onClickAdd;
 	this.setDirty = setDirty;
 	this.showAutosaveDialog = showAutosaveDialog;
-	
+
 	this.pageDirty = false;
 	this.timeoutID = null;
-	
+
 	function checkDirty(event) {
 		if (panelInterests.pageDirty)
 			return true;
@@ -20,7 +20,7 @@ function PanelInterests() {
 			if (target.prop("checked") != target.prop("defaultChecked"))
 				panelInterests.setDirty(false); // regular timeout
 			return true;
-			}
+		}
 		if (target.prop("defaultValue") != target.val())
 			panelInterests.setDirty(false); // regular timeout
 		return true;
@@ -47,17 +47,17 @@ function PanelInterests() {
 
 	function onClickAdd() {
 		if (panelInterests.pageDirty)
-				$("#addButDirtyMOD").modal("show");
-			else
-				$("#addFRM").get(0).submit();
+			$("#addButDirtyMOD").modal("show");
+		else
+			$("#addFRM").get(0).submit();
 	}
 
 	function setDirty(short) {
 		panelInterests.pageDirty = true;
 		if (short)
-				var timeout = 90000; // 1:30 for short
-			else
-				var timeout = 600000; // 10:00 for long
+			var timeout = 90000; // 1:30 for short
+		else
+			var timeout = 600000; // 10:00 for long
 		panelInterests.timeoutID = window.setTimeout(panelInterests.showAutosaveDialog, timeout);
 	}
 

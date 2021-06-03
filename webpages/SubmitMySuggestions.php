@@ -21,9 +21,9 @@ if ($message = validate_suggestions($paneltopics, $otherideas, $suggestedguests)
 }
 $message = "Database updated successfully.";
 $error = false;
-$paneltopicsE = mysqli_real_escape_string($paneltopics, $linki);
-$otherideasE = mysqli_real_escape_string($otherideas, $linki);
-$suggestedguestsE = mysqli_real_escape_string($suggestedguests, $linki);
+$paneltopicsE = mysqli_real_escape_string($linki, $paneltopics);
+$otherideasE = mysqli_real_escape_string($linki, $otherideas);
+$suggestedguestsE = mysqli_real_escape_string($linki, $suggestedguests);
 $query = <<<EOD
 INSERT INTO ParticipantSuggestions (badgeid, paneltopics, otherideas, suggestedguests)
 VALUES ("$badgeid", "$paneltopicsE", "$otherideasE", "$suggestedguestsE") 

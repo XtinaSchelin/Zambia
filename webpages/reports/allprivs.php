@@ -15,7 +15,7 @@ $report['columns'] = array(
     array("orderable" => false)
 );
 $report['queries'] = [];
-$report['queries']['users'] =<<<'EOD'
+$report['queries']['users'] = <<<'EOD'
 SELECT
         badgeid, P.pubsname, concat(CD.firstname,' ',CD.lastname) AS name, CONCAT(CD.lastname, CD.firstname) AS nameSort,
         IF(INSTR(P.pubsname, CD.lastname) > 0, CD.lastname, SUBSTRING_INDEX(P.pubsname, ' ', -1)) AS pubsnameSort
@@ -25,7 +25,7 @@ SELECT
     ORDER BY
         CD.lastname;
 EOD;
-$report['queries']['user_roles'] =<<<'EOD'
+$report['queries']['user_roles'] = <<<'EOD'
 SELECT
 		CD.badgeid, PR.permrolename
 	FROM
@@ -33,7 +33,7 @@ SELECT
 	   JOIN UserHasPermissionRole UHPR USING (badgeid)
 	   JOIN PermissionRoles PR USING (permroleid)
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

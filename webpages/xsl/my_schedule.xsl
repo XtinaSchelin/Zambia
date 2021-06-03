@@ -4,7 +4,8 @@
 	Created by Peter Olszowka on 2013-12-09.
 	Copyright (c) 2013 Peter Olszowka. All rights reserved.
 -->
-<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.1"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output encoding="UTF-8" indent="yes" method="html" />
 	<xsl:template match="/">
 		<xsl:choose>
@@ -25,32 +26,45 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+
 	<xsl:template match="doc/query[@queryName='sessions']/row">
 		<tr>
 			<td>
-				<span class="badge badge-info"><xsl:value-of select="@sessionid" /></span>
+				<span class="badge badge-info">
+					<xsl:value-of select="@sessionid" />
+				</span>
 			</td>
 			<td colspan="7"></td>
 		</tr>
 		<tr>
 			<td colspan="2">
-				<span class="label label-info"><xsl:value-of select="@title" /></span>
+				<span class="label label-info">
+					<xsl:value-of select="@title" />
+				</span>
 			</td>
 			<td>
-				<span class="label label-info" title="Room"><xsl:value-of select="@roomname" /></span>
+				<span class="label label-info" title="Room">
+					<xsl:value-of select="@roomname" />
+				</span>
 			</td>
 			<td>
-				<span class="label label-info" title="Track"><xsl:value-of select="@trackname" /></span>
+				<span class="label label-info" title="Track">
+					<xsl:value-of select="@trackname" />
+				</span>
 			</td>
 			<td>
-				<span class="label label-info" title="Type"><xsl:value-of select="@typename" /></span>
+				<span class="label label-info" title="Type">
+					<xsl:value-of select="@typename" />
+				</span>
 			</td>
 			<td>
-				<span class="label label-info"><xsl:value-of select="@starttime" /></span>
+				<span class="label label-info">
+					<xsl:value-of select="@starttime" />
+				</span>
 			</td>
 			<td>
-				<span class="label label-info">Duration: <xsl:value-of select="@duration" /></span>
+				<span class="label label-info">Duration: <xsl:value-of select="@duration" />
+				</span>
 			</td>
 			<td></td>
 		</tr>
@@ -58,7 +72,10 @@
 			<td></td>
 			<td colspan="7">
 				<span class="label">Description</span>
-				<span><xsl:text> </xsl:text><xsl:value-of select="@progguiddesc" /></span>
+				<span>
+					<xsl:text></xsl:text>
+					<xsl:value-of select="@progguiddesc" />
+				</span>
 			</td>
 		</tr>
 		<xsl:if test="@persppartinfo">
@@ -66,7 +83,10 @@
 				<td></td>
 				<td colspan="7">
 					<span class="label">Prospective participant information</span>
-					<span><xsl:text> </xsl:text><xsl:value-of select="@persppartinfo" /></span>
+					<span>
+						<xsl:text></xsl:text>
+						<xsl:value-of select="@persppartinfo" />
+					</span>
 				</td>
 			</tr>
 		</xsl:if>
@@ -75,7 +95,10 @@
 				<td></td>
 				<td colspan="7">
 					<span class="label">Notes for participants</span>
-					<span><xsl:text> </xsl:text><xsl:value-of select="@notesforpart" /></span>
+					<span>
+						<xsl:text></xsl:text>
+						<xsl:value-of select="@notesforpart" />
+					</span>
 				</td>
 			</tr>
 		</xsl:if>
@@ -99,17 +122,29 @@
 		<tr>
 			<td></td>
 			<td>
-				<span><xsl:value-of select="@pubsname" /></span>
-				<span><xsl:text> (</xsl:text><xsl:value-of select="@badgename" /><xsl:text>)</xsl:text></span>
+				<span>
+					<xsl:value-of select="@pubsname" />
+				</span>
+				<span>
+					<xsl:text> (</xsl:text>
+					<xsl:value-of select="@badgename" />
+					<xsl:text>)</xsl:text>
+				</span>
 				<xsl:if test="@moderator = '1'">
-					<span style="font-style:italic;"><xsl:text> mod</xsl:text></span>
+					<span style="font-style:italic;">
+						<xsl:text> mod</xsl:text>
+					</span>
 				</xsl:if>
 			</td>
 			<td colspan="2">
-				<span><xsl:value-of select="@email" /></span>
+				<span>
+					<xsl:value-of select="@email" />
+				</span>
 			</td>
 			<td colspan="4">
-				<span><xsl:value-of select="@comments" /></span>
+				<span>
+					<xsl:value-of select="@comments" />
+				</span>
 			</td>
 		</tr>
 	</xsl:template>

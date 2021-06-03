@@ -10,7 +10,7 @@ $report['categories'] = array(
     'Publication Reports' => 80
 );
 $report['queries'] = [];
-$report['queries']['Days'] =<<<'EOD'
+$report['queries']['Days'] = <<<'EOD'
 (SELECT
         datediff(now(), SEH.timestamp) AS days
     FROM
@@ -34,7 +34,7 @@ UNION
     ORDER BY
         days;
 EOD;
-$report['queries']['SessionDays'] =<<<'EOD'
+$report['queries']['SessionDays'] = <<<'EOD'
 SELECT
         SUBQA.sessionid, SUBQA.days, TR.trackname
     FROM
@@ -65,7 +65,7 @@ SELECT
     ORDER BY
         SUBQA.days, TR.trackname, SUBQA.sessionid;
 EOD;
-$report['queries']['Sessions'] =<<<'EOD'
+$report['queries']['Sessions'] = <<<'EOD'
 SELECT
         TR.trackname, S.title, SS.statusname, SCH.roomid, R.roomname, S.sessionid,
         DATE_FORMAT(ADDTIME('$ConStartDatim$',SCH.starttime),'%a %l:%i %p') AS starttime
@@ -95,7 +95,7 @@ SELECT
                         AND datediff(now(), POSH.inactivatedts) < 10
                 );
 EOD;
-$report['queries']['Persons'] =<<<'EOD'
+$report['queries']['Persons'] = <<<'EOD'
 SELECT
         P.badgeid, IF(P.pubsname IS NULL OR P.pubsname = "", CONCAT(CD.firstname, " ", CD.lastname), P.pubsname) AS name
     FROM
@@ -137,7 +137,7 @@ SELECT
                             AND DATEDIFF(NOW(), SEH.timestamp) < 10
                 );
 EOD;
-$report['queries']['Timestamps'] =<<<'EOD'
+$report['queries']['Timestamps'] = <<<'EOD'
 SELECT
         SEH.timestamp, DATE_FORMAT(SEH.timestamp, "%c/%e/%y %l:%i %p") AS formattedts, DATEDIFF(NOW(), SEH.timestamp) AS days, sessionid, badgeid
     FROM
@@ -159,7 +159,7 @@ SELECT
     WHERE
         DATEDIFF(NOW(), POSH.inactivatedts) < 10;
 EOD;
-$report['queries']['ParticipantEdits'] =<<<'EOD'
+$report['queries']['ParticipantEdits'] = <<<'EOD'
 SELECT
         POSH.badgeid, POSH.sessionid, POSH.moderator, POSH.createdts, POSH.createdbybadgeid, POSH.inactivatedts, POSH.inactivatedbybadgeid
     FROM
@@ -168,7 +168,7 @@ SELECT
            DATEDIFF(NOW(), POSH.createdts) < 10
         OR DATEDIFF(NOW(), POSH.inactivatedts) < 10;
 EOD;
-$report['queries']['SessionEdits'] =<<<'EOD'
+$report['queries']['SessionEdits'] = <<<'EOD'
 SELECT
         SEH.timestamp, SEH.sessionid, SEH.badgeid, SEH.editdescription, SS.statusname, SEC.description
     FROM
@@ -178,7 +178,7 @@ SELECT
     WHERE
         DATEDIFF(NOW(), SEH.timestamp) < 10;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />

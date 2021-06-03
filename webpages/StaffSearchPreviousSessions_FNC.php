@@ -212,7 +212,7 @@ EOD;
         $query .= " PS.previousstatusid={$SessionSearchParameters['status']} AND";
     }
     if ($SessionSearchParameters['title'] != '') {
-        $query .= " PS.title LIKE \"%" . mysql_real_escape_string($SessionSearchParameters['title']) . "%\" AND";
+        $query .= " PS.title LIKE \"%" . mysqli_real_escape_string($linki, $SessionSearchParameters['title']) . "%\" AND";
     }
     if (!$SessionSearchParameters['showimported']) {
         $query .= " PS.importedsessionid IS NULL AND";

@@ -7,7 +7,7 @@ $report['categories'] = array(
     'Publication Reports' => 130,
 );
 $report['queries'] = [];
-$report['queries']['participants'] =<<<'EOD'
+$report['queries']['participants'] = <<<'EOD'
 SELECT
         P.badgeid, P.pubsname
     FROM
@@ -28,7 +28,7 @@ SELECT
          IF(INSTR(P.pubsname, CD.lastname) > 0, CD.lastname, SUBSTRING_INDEX(P.pubsname, ' ', -1)),
          CD.firstname;
 EOD;
-$report['queries']['sessions'] =<<<'EOD'
+$report['queries']['sessions'] = <<<'EOD'
 SELECT
         POS.badgeid, POS.moderator, POS.sessionid
     FROM
@@ -40,7 +40,7 @@ SELECT
     ORDER BY
         POS.badgeid, POS.sessionid;
 EOD;
-$report['xsl'] =<<<'EOD'
+$report['xsl'] = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output encoding="UTF-8" indent="yes" method="html" />
